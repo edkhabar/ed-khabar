@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ED Khabar – प्रवर्तन निदेशालय समाचार</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;800&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14213d; --paper:#faf7f0; --card:#ffffff; --muted:#5c6475;
+  --accent:#d9480f; --accent-soft:#fff0e6; --line:#e6e0d4; --gold:#b8860b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Mukta',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55}
+a{color:inherit}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+
+/* masthead */
+header{background:var(--ink);color:#fff;padding:18px 0 14px;border-bottom:4px solid var(--accent)}
+.brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.brand h1{font-family:'Tiro Devanagari Hindi',serif;font-size:2rem;font-weight:400;letter-spacing:.5px}
+.brand h1 span{color:#ffb38a}
+.brand small{opacity:.75;font-size:.9rem}
+.dateline{font-size:.85rem;opacity:.7;margin-top:4px}
+
+/* ticker */
+.ticker{background:var(--accent);color:#fff;overflow:hidden;white-space:nowrap;font-weight:600;font-size:.95rem}
+.ticker .lbl{display:inline-block;background:#9c3008;padding:8px 12px;position:relative;z-index:2}
+.ticker .track{display:inline-block;padding-left:100%;animation:scroll 45s linear infinite}
+.ticker .track span{margin-right:48px}
+@keyframes scroll{to{transform:translateX(-100%)}}
+@media (prefers-reduced-motion:reduce){.ticker .track{animation:none;padding-left:12px}}
+
+/* nav tabs */
+nav.tabs{display:flex;gap:4px;margin:18px 0 10px;border-bottom:1px solid var(--line);overflow-x:auto}
+nav.tabs button{background:none;border:none;font:inherit;font-weight:600;color:var(--muted);padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs button.on{color:var(--ink);border-color:var(--accent)}
+
+/* controls */
+.controls{display:flex;flex-direction:column;gap:10px;margin:12px 0 18px}
+.search{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font:inherit;font-size:.9rem;cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* cards */
+.grid{display:grid;gap:14px}
+@media(min-width:720px){.grid{grid-template-columns:1fr 1fr}.grid .lead{grid-column:1/-1}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;position:relative}
+.card.lead{border-left:5px solid var(--accent)}
+.card.lead h2{font-size:1.45rem}
+.meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:.8rem;color:var(--muted);margin-bottom:6px}
+.tag{background:var(--accent-soft);color:var(--accent);font-weight:700;padding:2px 9px;border-radius:6px}
+.card h2{font-size:1.12rem;line-height:1.35;margin-bottom:6px;padding-right:34px}
+.card p{color:#333a48;font-size:.97rem}
+.card .src{display:inline-block;margin-top:10px;font-size:.85rem;font-weight:600;color:var(--accent);text-decoration:none}
+.card .src:hover{text-decoration:underline}
+.save{position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--gold)}
+.empty{text-align:center;color:var(--muted);padding:40px 0}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-size:1.5rem;color:var(--accent)}
+.stat span{font-size:.78rem;color:var(--muted)}
+
+/* explainer */
+details{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:0 16px}
+summary{cursor:pointer;font-weight:700;padding:14px 0;list-style:none}
+summary::after{content:'+';float:right;color:var(--accent);font-size:1.2rem}
+details[open] summary::after{content:'–'}
+details p,details ul{padding-bottom:14px;color:#333a48}
+details ul{padding-left:20px}
+.gloss{display:grid;gap:10px}
+.gloss div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.gloss b{color:var(--accent)}
+
+.alert{background:#fff8e1;border:1px solid #f0d58a;border-radius:12px;padding:14px 16px;margin:16px 0}
+.links a{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;text-decoration:none;font-weight:600}
+.links a small{display:block;font-weight:400;color:var(--muted)}
+
+footer{margin-top:36px;background:var(--ink);color:#cfd5e2;padding:20px 0;font-size:.85rem}
+footer b{color:#fff}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <h1>ED <span>खबर</span></h1>
+      <small>प्रवर्तन निदेशालय से जुड़ी ताज़ा ख़बरें</small>
+    </div>
+    <div class="dateline" id="dateline"></div>
+  </div>
+</header>
+
+<div class="ticker" aria-label="ताज़ा सुर्खियाँ">
+  <span class="lbl">ताज़ा</span><div class="track" id="ticker"></div>
+</div>
+
+<main class="wrap">
+  <nav class="tabs" role="tablist">
+    <button class="on" data-view="news">📰 ख़बरें</button>
+    <button data-view="saved">⭐ सेव की गई</button>
+    <button data-view="learn">📘 ED को समझें</button>
+    <button data-view="links">🔗 ज़रूरी लिंक</button>
+  </nav>
+
+  <!-- NEWS -->
+  <section id="view-news">
+    <div class="stats" id="stats"></div>
+    <div class="controls">
+      <input class="search" id="q" type="search" placeholder="खोजें: राज्य, नाम, केस…  (जैसे Punjab, Kolkata)">
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="grid" id="list"></div>
+  </section>
+
+  <!-- SAVED -->
+  <section id="view-saved" class="hidden">
+    <div class="grid" id="savedList"></div>
+  </section>
+
+  <!-- LEARN -->
+  <section id="view-learn" class="hidden">
+    <details open>
+      <summary>ED क्या है?</summary>
+      <p>प्रवर्तन निदेशालय (Directorate of Enforcement) भारत सरकार के वित्त मंत्रालय के राजस्व विभाग के तहत काम करने वाली वित्तीय जाँच एजेंसी है। 1956 में बनी यह एजेंसी मुख्य रूप से मनी लॉन्ड्रिंग और विदेशी मुद्रा से जुड़े कानूनों को लागू करती है। मुख्यालय नई दिल्ली (प्रवर्तन भवन) में है और देश भर में ज़ोनल ऑफ़िस हैं।</p>
+    </details>
+    <details>
+      <summary>ED किन कानूनों के तहत काम करता है?</summary>
+      <ul>
+        <li><b>PMLA, 2002</b> – धन शोधन निवारण अधिनियम (मनी लॉन्ड्रिंग)</li>
+        <li><b>FEMA, 1999</b> – विदेशी मुद्रा प्रबंधन अधिनियम</li>
+        <li><b>FEOA, 2018</b> – भगोड़ा आर्थिक अपराधी अधिनियम</li>
+      </ul>
+    </details>
+    <details>
+      <summary>एक ED केस आमतौर पर कैसे आगे बढ़ता है?</summary>
+      <ul>
+        <li>पुलिस/CBI आदि की FIR (मूल अपराध) के आधार पर ECIR दर्ज</li>
+        <li>तलाशी (Search) और ज़ब्ती (Seizure)</li>
+        <li>समन (Summons) भेजकर पूछताछ, ज़रूरत पड़ने पर गिरफ़्तारी</li>
+        <li>संपत्ति की अस्थायी कुर्की (Provisional Attachment)</li>
+        <li>विशेष PMLA अदालत में अभियोजन शिकायत (Prosecution Complaint)</li>
+      </ul>
+    </details>
+    <h3 style="margin:18px 0 10px">शब्दकोश</h3>
+    <div class="gloss">
+      <div><b>ECIR</b> – Enforcement Case Information Report; ED की तरफ़ से दर्ज केस, FIR जैसा।</div>
+      <div><b>PAO</b> – Provisional Attachment Order; संपत्ति को अस्थायी रूप से कुर्क करने का आदेश।</div>
+      <div><b>PC</b> – Prosecution Complaint; ED की चार्जशीट जैसी शिकायत, विशेष अदालत में।</div>
+      <div><b>PoC</b> – Proceeds of Crime; अपराध से कमाई गई संपत्ति/पैसा।</div>
+      <div><b>हवाला</b> – बिना औपचारिक बैंकिंग के पैसे भेजने का अनौपचारिक नेटवर्क।</div>
+    </div>
+    <p style="margin-top:14px;color:var(--muted);font-size:.9rem">याद रखें: छापा, समन या गिरफ़्तारी का मतलब दोष साबित होना नहीं है। आरोप अदालत में तय होते हैं।</p>
+  </section>
+
+  <!-- LINKS -->
+  <section id="view-links" class="hidden">
+    <div class="alert">⚠️ <b>फ़र्ज़ी ED समन से सावधान!</b> ठग नकली ED अफ़सर बनकर पैसे माँगते हैं। कोई भी समन मिले तो ED की आधिकारिक वेबसाइट के "Verify Your Summons" सेक्शन में जाँचें।</div>
+    <div class="links">
+      <a href="https://enforcementdirectorate.gov.in/" target="_blank" rel="noopener">ED आधिकारिक वेबसाइट<small>enforcementdirectorate.gov.in – समन वेरिफ़िकेशन भी यहीं</small></a>
+      <a href="https://enforcementdirectorate.gov.in/press-release" target="_blank" rel="noopener">ED प्रेस रिलीज़ (English)<small>सबसे भरोसेमंद, सीधे स्रोत से</small></a>
+      <a href="https://enforcementdirectorate.gov.in/hi/press-release" target="_blank" rel="noopener">ED प्रेस रिलीज़ (हिंदी)<small>हिंदी में आधिकारिक अपडेट</small></a>
+      <a href="https://newsonair.gov.in/" target="_blank" rel="noopener">News On Air<small>प्रसार भारती की ख़बरें</small></a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>ED Khabar</b> एक स्वतंत्र समाचार संकलन पेज है। इसका प्रवर्तन निदेशालय या भारत सरकार से कोई संबंध नहीं है। सुर्खियाँ Google News से अपने आप जुटाई जाती हैं; हर ख़बर मूल स्रोत पर खुलती है।</p>
+    <p style="margin-top:8px">अंतिम अपडेट: <span id="lastup">—</span></p>
+  </div>
+</footer>
+
+<script>
+const CATS = ['सभी','छापेमारी','गिरफ़्तारी','समन','कुर्की','अदालत','FEMA','अन्य'];
+let NEWS = [], cat = 'सभी', q = '', lang = 'all';
+let saved = [];
+try { saved = JSON.parse(localStorage.getItem('edk_saved') || '[]'); } catch(e) {}
+function persist(){ try{ localStorage.setItem('edk_saved', JSON.stringify(saved)); }catch(e){} }
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = d => new Date(d).toLocaleString('hi-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kolkata'});
+function ago(d){ const m=(Date.now()-new Date(d))/60000;
+  if(m<60) return Math.max(1,Math.round(m))+' मिनट पहले'; if(m<1440) return Math.round(m/60)+' घंटे पहले';
+  return Math.round(m/1440)+' दिन पहले'; }
+
+function stats(){
+  const today = NEWS.filter(n => Date.now()-new Date(n.published) < 864e5).length;
+  const week = NEWS.filter(n => Date.now()-new Date(n.published) < 7*864e5).length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><b>${today}</b><span>पिछले 24 घंटे</span></div>
+    <div class="stat"><b>${week}</b><span>इस हफ़्ते</span></div>
+    <div class="stat"><b>${NEWS.length}</b><span>कुल ख़बरें</span></div>`;
+}
+function card(n, lead){
+  const on = saved.includes(n.url);
+  return `<article class="card${lead?' lead':''}">
+    <button class="save" data-url="${esc(n.url)}" aria-label="सेव करें">${on?'★':'☆'}</button>
+    <div class="meta"><span class="tag">${esc(n.category)}</span><span>${esc(n.source)}</span><span title="${fmt(n.published)}">🕒 ${ago(n.published)}</span></div>
+    <h2>${esc(n.title)}</h2>
+    <a class="src" href="${esc(n.url)}" target="_blank" rel="noopener">पूरी ख़बर पढ़ें →</a>
+  </article>`;
+}
+function render(){
+  document.getElementById('chips').innerHTML =
+    `<button class="chip${lang==='all'?' on':''}" data-lang="all">हिंदी + English</button>
+     <button class="chip${lang==='hi'?' on':''}" data-lang="hi">सिर्फ़ हिंदी</button>
+     <button class="chip${lang==='en'?' on':''}" data-lang="en">English only</button>` +
+    CATS.map(c => `<button class="chip${c===cat?' on':''}" data-cat="${c}">${c}</button>`).join('');
+  const ql = q.toLowerCase();
+  const items = NEWS.filter(n =>
+    (cat==='सभी' || n.category===cat) && (lang==='all' || n.lang===lang) &&
+    (!ql || (n.title+' '+n.source).toLowerCase().includes(ql)));
+  document.getElementById('list').innerHTML = items.length
+    ? items.slice(0,150).map((n,i) => card(n, i===0 && cat==='सभी' && !q)).join('')
+    : '<div class="empty">कोई ख़बर नहीं मिली।</div>';
+  const s = NEWS.filter(n => saved.includes(n.url));
+  document.getElementById('savedList').innerHTML = s.length
+    ? s.map(n => card(n)).join('') : '<div class="empty">अभी कोई ख़बर सेव नहीं की। किसी ख़बर पर ☆ दबाएँ।</div>';
+}
+document.addEventListener('click', e => {
+  const c = e.target.closest('[data-cat]'); if (c){ cat = c.dataset.cat; render(); return; }
+  const l = e.target.closest('[data-lang]'); if (l){ lang = l.dataset.lang; render(); return; }
+  const s = e.target.closest('.save');
+  if (s){ const u = s.dataset.url; saved = saved.includes(u) ? saved.filter(x=>x!==u) : [...saved, u]; persist(); render(); return; }
+  const t = e.target.closest('[data-view]');
+  if (t){ document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('on', b===t));
+    ['news','saved','learn','links'].forEach(v => document.getElementById('view-'+v).classList.toggle('hidden', v!==t.dataset.view)); }
+});
+document.getElementById('q').addEventListener('input', e => { q = e.target.value.trim(); render(); });
+
+async function load(){
+  try{
+    const r = await fetch('news.json?t=' + Date.now(), {cache:'no-store'});
+    const d = await r.json();
+    NEWS = d.items.sort((a,b) => b.published.localeCompare(a.published));
+    document.getElementById('dateline').textContent = 'अपडेट: ' + fmt(d.updated) + ' (हर 2 घंटे में अपने आप)';
+    document.getElementById('lastup').textContent = fmt(d.updated);
+    document.getElementById('ticker').innerHTML = NEWS.slice(0,6).map(n => `<span>● ${esc(n.title)}</span>`).join('');
+  }catch(e){
+    document.getElementById('list').innerHTML = '<div class="empty">ख़बरें लोड नहीं हो सकीं। थोड़ी देर बाद रिफ़्रेश करें।</div>';
+  }
+  stats(); render();
+}
+load();
+setInterval(load, 15*60*1000);
+</script>
+</body>
+</html>
