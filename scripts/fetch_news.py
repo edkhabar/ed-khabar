@@ -21,18 +21,18 @@ MAX_ITEMS = 300
 
 # (language, hl, ceid, query)
 FEEDS = [
-    ("hi", "hi", "IN:hi", '"प्रवर्तन निदेशालय" OR "ईडी" छापेमारी OR "ED" PMLA when:7d'),
     ("en", "en-IN", "IN:en", '"Enforcement Directorate" when:7d'),
     ("en", "en-IN", "IN:en", '"ED" (PMLA OR FEMA OR "money laundering") when:7d'),
+    ("hi", "hi", "IN:hi", '"प्रवर्तन निदेशालय" OR "ईडी" छापेमारी OR "ED" PMLA when:7d'),
 ]
 
 CATEGORIES = [
-    ("गिरफ़्तारी", r"arrest|गिरफ्तार|गिरफ़्तार|custody|हिरासत"),
-    ("समन", r"summon|समन|questioning|पूछताछ|appear"),
-    ("कुर्की", r"attach|कुर्क|seiz|ज़ब्त|जब्त|freez"),
-    ("अदालत", r"court|अदालत|bail|जमानत|ज़मानत|prosecution complaint|charge ?sheet|आरोप पत्र|chargesheet|PMLA court"),
-    ("छापेमारी", r"raid|search|छाप|तलाशी"),
-    ("FEMA", r"\bFEMA\b|foreign exchange|विदेशी मुद्रा|hawala|हवाला"),
+    ("Arrests", r"arrest|custody|nabbed|held|गिरफ्तार|गिरफ़्तार|हिरासत"),
+    ("Summons", r"summon|questioning|questioned|appear|grill|समन|पूछताछ"),
+    ("Attachments", r"attach|seiz|freez|confiscat|कुर्क|ज़ब्त|जब्त"),
+    ("Court", r"court|bail|prosecution complaint|charge ?sheet|chargesheet|tribunal|\bHC\b|\bSC\b|अदालत|कोर्ट|जमानत|ज़मानत|आरोप पत्र"),
+    ("Raids", r"raid|search|छापा|छापे|छापेमारी|तलाशी"),
+    ("FEMA", r"\bFEMA\b|foreign exchange|hawala|विदेशी मुद्रा|हवाला"),
 ]
 
 # ED se related hone ka check (taaki "ED" shabd wali galat khabrein na aayein)
@@ -54,7 +54,7 @@ def categorize(text):
     for name, pattern in CATEGORIES:
         if re.search(pattern, text, re.I):
             return name
-    return "अन्य"
+    return "Other"
 
 
 def norm(title):
@@ -114,6 +114,9 @@ def main():
     cutoff = dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=KEEP_DAYS)
     merged, seen = [], set()
     for item in sorted(fresh + load_existing(), key=lambda x: x["published"], reverse=True):
+        if item.get("lang", "en") != "en":
+            continue  # site ab sirf English hai
+        item["category"] = categorize(item["title"])
         key = norm(item["title"])
         if key in seen:
             continue
