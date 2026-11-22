@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PMLA Desk · ED Khabar</title>
+<meta name="description" content="Free PMLA and FEMA reference: deadline calculator, key sections, case law digest, checklists and scheduled offences.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: sticky header with search + scrollable tab bar; one panel per tool; mobile-first single column, two columns on wide screens for cards. */
+:root{
+  --bg:#f4f6f8;
+  --surface:#ffffff;
+  --ink:#14202b;
+  --muted:#5a6876;
+  --line:#d9e0e6;
+  --accent:#1d4f7a;
+  --accent-soft:#e3edf6;
+  --ok:#1f7a4d; --ok-bg:#e2f3ea;
+  --warn:#9a5b00; --warn-bg:#fbefd9;
+  --bad:#a12a2a; --bad-bg:#f8e1e1;
+  --font-display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f161d; --surface:#17212b; --ink:#e6edf3; --muted:#9aabba; --line:#2a3744;
+    --accent:#7fb4e6; --accent-soft:#1c3247;
+    --ok:#6fd3a0; --ok-bg:#173527; --warn:#f0bd62; --warn-bg:#3a2c12; --bad:#f08f8f; --bad-bg:#3d1c1c;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f161d; --surface:#17212b; --ink:#e6edf3; --muted:#9aabba; --line:#2a3744;
+  --accent:#7fb4e6; --accent-soft:#1c3247;
+  --ok:#6fd3a0; --ok-bg:#173527; --warn:#f0bd62; --warn-bg:#3a2c12; --bad:#f08f8f; --bad-bg:#3d1c1c;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--font-body)}
+a{color:var(--accent)}
+header{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:12px;padding:12px 16px 8px;max-width:1080px;margin:0 auto;flex-wrap:wrap}
+.brand{font:700 20px/1 var(--font-display);letter-spacing:.01em}
+.brand small{display:block;font:500 11px/1.4 var(--font-body);color:var(--muted);letter-spacing:0}
+.search{flex:1 1 240px;position:relative}
+.search input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.search input:focus{outline:2px solid var(--accent);outline-offset:1px}
+nav{display:flex;gap:4px;overflow-x:auto;padding:0 12px 8px;max-width:1080px;margin:0 auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto;border:0;background:transparent;color:var(--muted);font:600 14px/1 var(--font-body);padding:9px 12px;border-radius:999px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--accent-soft);color:var(--accent)}
+nav button:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{max-width:1080px;margin:0 auto;padding:16px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0}
+h2{font-size:22px;margin-bottom:4px}
+h3{font-size:17px}
+.lede{color:var(--muted);margin:0 0 16px;max-width:65ch}
+.panel{display:none}
+.panel.on{display:block}
+.grid{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:760px){.grid.two{grid-template-columns:1fr 1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card p{margin:6px 0 0}
+.sec{font:500 12px/1 var(--font-mono);color:var(--accent);background:var(--accent-soft);padding:4px 7px;border-radius:5px;display:inline-block}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tag{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px}
+.court{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;font:500 13px var(--font-body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+label{font-weight:600;font-size:13px;display:block;margin-bottom:4px}
+select,input[type=date],input[type=datetime-local],input[type=number],textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.form{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:640px){.form{grid-template-columns:2fr 1fr 1fr}}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--surface);padding:9px 14px;border-radius:8px;font:600 14px var(--font-body);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.tl{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+.tl li{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:8px;padding:10px 12px}
+.tl li.ok{border-left-color:var(--ok)}
+.tl li.warn{border-left-color:var(--warn)}
+.tl li.bad{border-left-color:var(--bad)}
+.tl .when{font:600 15px var(--font-body);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.tl .what{font-weight:600}
+.tl .why{grid-column:1/-1;color:var(--muted);font-size:13px}
+.pill{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;display:inline-block;margin-top:2px}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.pill.info{background:var(--accent-soft);color:var(--accent)}
+.note{font-size:13px;color:var(--muted);margin-top:12px;max-width:70ch}
+.check{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start}
+.check input{margin-top:4px;width:18px;height:18px;accent-color:var(--accent);flex:0 0 auto}
+.check small{color:var(--muted);display:block}
+.banner{background:var(--warn-bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:16px}
+.empty{color:var(--muted);padding:16px 0}
+.result-type{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+footer{max-width:1080px;margin:0 auto;padding:8px 16px 32px;color:var(--muted);font-size:12px}
+.home-tiles{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-bottom:18px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:left;cursor:pointer;color:var(--ink);font:inherit}
+.tile b{display:block;font-family:var(--font-display);font-size:16px}
+.tile span{font-size:13px;color:var(--muted)}
+.tile:hover{border-color:var(--accent)}
+.notes-list{display:grid;gap:8px;margin-top:12px}
+.notes-list .card{display:flex;gap:10px;justify-content:space-between;align-items:flex-start}
+.notes-list .card div{white-space:pre-wrap;overflow-wrap:anywhere}
+.x{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:13px;text-decoration:underline}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="brand"><a href="/" style="color:inherit;text-decoration:none">PMLA Desk</a><small><a href="/">← ED Khabar</a> · PMLA · FEMA · deadlines · case law · checklists</small></div>
+    <div class="search"><input id="q" type="search" placeholder="Search everything: e.g. 50, arrest, retention, 180 days" aria-label="Search everything"></div>
+  </div>
+  <nav id="tabs" role="tablist" aria-label="Sections"></nav>
+</header>
+
+<main>
+  <section class="panel" id="p-home">
+    <div class="banner"><b>Public information only.</b> Do not enter case names, ECIR numbers, persons' details or any internal material anywhere on this page. Everything runs in your browser; nothing is uploaded.</div>
+    <h2>Quick start</h2>
+    <p class="lede">The most used tools are one tap away. Use the search bar to look across sections, judgments, checklists and scheduled offences together.</p>
+    <div class="home-tiles" id="tiles"></div>
+    <h3 style="margin-bottom:8px">Key timelines at a glance</h3>
+    <div class="grid two" id="glance"></div>
+  </section>
+
+  <section class="panel" id="p-search">
+    <h2>Search results</h2>
+    <p class="lede" id="search-count"></p>
+    <div class="grid" id="search-out"></div>
+  </section>
+
+  <section class="panel" id="p-deadlines">
+    <h2>Deadline calculator</h2>
+    <p class="lede">Pick the event and its date. The tool lists every statutory deadline that follows from it and how many days are left.</p>
+    <div class="card">
+      <div class="form">
+        <div><label for="ev">Event</label><select id="ev"></select></div>
+        <div id="date-wrap"><label for="d">Date of event</label><input type="date" id="d"></div>
+        <div id="extra-wrap"><label for="ex">Days excluded (court stay)</label><input type="number" id="ex" min="0" value="0"></div>
+      </div>
+      <ul class="tl" id="tl"></ul>
+      <div class="row" style="margin-top:12px"><button class="btn ghost" id="copy-tl" type="button">Copy timeline</button><span id="copy-msg" class="note" style="margin:0"></span></div>
+      <p class="note">Counting rule used: the day of the event is excluded and the period ends on the last day shown (Section 9, General Clauses Act). Periods during which a court's stay or interim order operated are excluded from the 365 days under the Explanation to Section 8(3). Always confirm against the bare Act and your legal cell's advice.</p>
+    </div>
+  </section>
+
+  <section class="panel" id="p-pmla">
+    <h2>PMLA, 2002: key sections</h2>
+    <p class="lede">Plain-language summaries of the provisions used most in investigation and adjudication. Read the bare Act for exact wording and provisos.</p>
+    <div class="filters" id="pmla-f"></div>
+    <div class="grid two" id="pmla-out"></div>
+  </section>
+
+  <section class="panel" id="p-fema">
+    <h2>FEMA, 1999 and FEOA, 2018</h2>
+    <p class="lede">Civil contraventions under FEMA, and the Fugitive Economic Offenders Act, which ED also enforces.</p>
+    <div class="grid two" id="fema-out"></div>
+  </section>
+
+  <section class="panel" id="p-cases">
+    <h2>Case law digest</h2>
+    <p class="lede">Short summaries of judgments that shape day-to-day PMLA work. Read the full judgment before relying on any of them; later benches may have distinguished or referred them.</p>
+    <div class="filters" id="case-f"></div>
+    <div class="grid" id="case-out"></div>
+  </section>
+
+  <section class="panel" id="p-check">
+    <h2>Procedure checklists</h2>
+    <p class="lede">Tick through before and after each action. Ticks are kept only on this device and can be cleared any time.</p>
+    <div class="row" style="margin-bottom:12px"><button class="btn ghost" type="button" id="clear-checks">Clear all ticks</button></div>
+    <div class="grid two" id="check-out"></div>
+  </section>
+
+  <section class="panel" id="p-sched">
+    <h2>Scheduled offences</h2>
+    <p class="lede">Money laundering needs proceeds of crime from a scheduled offence (Section 2(1)(y)). This list covers the Acts in the Schedule that come up most. Check the current Schedule for exact paragraphs and sections.</p>
+    <div class="grid two" id="sched-parts"></div>
+    <h3 style="margin:18px 0 8px">Part A: Acts commonly encountered</h3>
+    <div class="grid two" id="sched-out"></div>
+  </section>
+
+  <section class="panel" id="p-notes">
+    <h2>My notes</h2>
+    <p class="lede">Keep track of new circulars, notifications and amendments you come across. Notes stay in this browser only and are not seen by anyone else.</p>
+    <div class="banner">Write public references only, such as "Notification dated … amending Rule …". Never write case or person details here.</div>
+    <div class="card">
+      <label for="note-t">New note</label>
+      <textarea id="note-t" rows="3" placeholder="e.g. CBDT/MoF notification on PMLA Rules, date, what changed"></textarea>
+      <div class="row" style="margin-top:8px"><button class="btn" id="note-add" type="button">Save note</button><span class="note" id="note-msg" style="margin:0"></span></div>
+    </div>
+    <div class="notes-list" id="notes"></div>
+  </section>
+</main>
+<footer>Unofficial reference tool built from publicly available law and reported judgments. It is not a publication of the Directorate of Enforcement or any government department, and it is not legal advice. Last content review: November 2026.</footer>
+
+<script>
+const TABS=[
+ ["home","Home"],["deadlines","Deadlines"],["pmla","PMLA"],["fema","FEMA / FEOA"],["cases","Case law"],["check","Checklists"],["sched","Scheduled offences"],["notes","My notes"]
+];
+
+const PMLA=[
+ {s:"2(1)(u)",t:"Proceeds of crime",g:"Definitions",b:"Property derived or obtained, directly or indirectly, from criminal activity relating to a scheduled offence, or its value. Where such property is taken or held abroad, property of equal value in India is covered. The 2019 Explanation extends it to property from any criminal activity relatable to the scheduled offence."},
+ {s:"2(1)(y)",t:"Scheduled offence",g:"Definitions",b:"Offences in Part A; offences in Part B where the total value involved is ₹1 crore or more; and offences in Part C (cross-border)."},
+ {s:"3",t:"Offence of money laundering",g:"Offence",b:"Directly or indirectly attempting to indulge, knowingly assisting, being a party to, or being actually involved in any process or activity connected with proceeds of crime, including concealment, possession, acquisition, use, or projecting or claiming it as untainted. The Explanation makes it a continuing activity for as long as the person enjoys the proceeds."},
+ {s:"4",t:"Punishment",g:"Offence",b:"Rigorous imprisonment of 3 to 7 years and fine. Up to 10 years where the scheduled offence falls under the NDPS Act."},
+ {s:"5",t:"Provisional attachment",g:"Attachment",b:"Director, or an officer not below Deputy Director authorised by the Director, with reason to believe (recorded in writing) that proceeds of crime are likely to be concealed, transferred or dealt with so as to frustrate confiscation, may provisionally attach property for up to 180 days. Copy of order and material goes to the Adjudicating Authority in a sealed envelope immediately (5(2)). Complaint to the Adjudicating Authority within 30 days (5(5))."},
+ {s:"8",t:"Adjudication",g:"Attachment",b:"Adjudicating Authority issues notice of not less than 30 days calling for sources of income and evidence (8(1)), hears the parties (8(2)), and if satisfied confirms attachment, retention or freezing (8(3)). Confirmation continues during investigation for up to 365 days or while proceedings for an offence under the Act are pending before a court. Court-stay periods are excluded from the 365 days. Confiscation on conviction under 8(5); restoration to claimants under 8(8)."},
+ {s:"9",t:"Vesting in Central Government",g:"Attachment",b:"On confiscation, all rights and title in the property vest absolutely in the Central Government, free from encumbrances."},
+ {s:"12",t:"Reporting entity obligations",g:"Reporting entities",b:"Banks, financial institutions, intermediaries and other reporting entities must maintain records of transactions and identity, furnish information to the Director (FIU-IND), and keep records for five years."},
+ {s:"13",t:"Powers of Director on reporting entities",g:"Reporting entities",b:"Director may call for records, order audit, and impose warnings, directions or monetary penalty for failure to comply with Chapter IV obligations."},
+ {s:"16",t:"Survey",g:"Search & seizure",b:"Authority may enter premises where an act constituting money laundering is committed, to inspect records, place marks of identification and make an inventory."},
+ {s:"17",t:"Search and seizure",g:"Search & seizure",b:"Director or authorised officer not below Deputy Director, on information in possession and reason to believe recorded in writing, may enter, search, break open, seize records and property, or issue a freezing order (17(1A)). Reasons and material go to the Adjudicating Authority immediately (17(2)). Application to the Adjudicating Authority within 30 days of seizure or freezing (17(4))."},
+ {s:"18",t:"Search of persons",g:"Search & seizure",b:"Search of a person suspected of concealing records or proceeds of crime. Person may require to be taken before a Gazetted Officer or Magistrate. Search of a woman only by a woman."},
+ {s:"19",t:"Power to arrest",g:"Arrest",b:"Director, Deputy Director, Assistant Director or authorised officer, on material in possession and reason to believe (recorded in writing) that a person is guilty, may arrest and must inform the grounds as soon as may be. Copy of the order and material to the Adjudicating Authority in a sealed envelope (19(2)). Produce before the Special Court or Magistrate within 24 hours, excluding journey time (19(3)). Grounds must be furnished in writing (Pankaj Bansal, 2023)."},
+ {s:"20",t:"Retention of property",g:"Search & seizure",b:"Seized or frozen property may be retained or kept frozen for up to 180 days from seizure or freezing, by order with reasons recorded in writing. Order and material to the Adjudicating Authority (20(2)). After 180 days the property must be returned unless the Adjudicating Authority permits further retention (20(3))."},
+ {s:"21",t:"Retention of records",g:"Search & seizure",b:"Same scheme for records: retention for up to 180 days, then return unless the Adjudicating Authority permits. Person may take copies."},
+ {s:"22–24",t:"Presumptions and burden of proof",g:"Evidence",b:"Presumptions about records and property found in possession, and in inter-connected transactions. Under Section 24, for a person charged with money laundering the court presumes the proceeds of crime are involved unless proved otherwise; for others the Authority or Court may so presume."},
+ {s:"26",t:"Appeal to Appellate Tribunal",g:"Appeals",b:"Director or any person aggrieved by an order of the Adjudicating Authority may appeal within 45 days of receipt of the order. The Tribunal may entertain it later on sufficient cause; no outer limit is fixed."},
+ {s:"42",t:"Appeal to High Court",g:"Appeals",b:"On any question of law or fact, within 60 days of communication of the Tribunal's order. High Court may allow a further period of up to 60 days on sufficient cause; it cannot condone delay beyond 120 days in total."},
+ {s:"43–44",t:"Special Courts",g:"Trial",b:"Sessions Courts designated as Special Courts try money laundering offences. The scheduled offence and the PMLA offence may be tried by the same Special Court. Cognizance on a complaint by an authorised authority."},
+ {s:"45",t:"Bail: twin conditions",g:"Trial",b:"No bail unless the Public Prosecutor is heard and, if opposed, the court is satisfied there are reasonable grounds to believe the accused is not guilty and is not likely to commit an offence while on bail. Relaxations for persons under 16, women, the sick or infirm, and where the amount is less than ₹1 crore. Courts have held these conditions cannot justify indefinite pre-trial detention."},
+ {s:"50",t:"Summons, documents and evidence",g:"Investigation",b:"Director has the powers of a civil court for discovery, inspection, attendance and examination on oath, production of records and issuing commissions. Director, Additional, Joint, Deputy or Assistant Director may summon any person. Persons summoned must attend and state the truth. Proceedings are judicial proceedings for Sections 193 and 228 IPC (now BNS equivalents)."},
+ {s:"54",t:"Officers bound to assist",g:"Investigation",b:"Police, customs, SEBI, RBI, IRDA, registrars and other listed officers must assist authorities in enforcing the Act."},
+ {s:"63",t:"False information or failure to give information",g:"Investigation",b:"Punishes false information and wilful refusal to answer, sign statements, attend or produce records when summoned, with fine and, for repeat, prosecution."},
+ {s:"66",t:"Disclosure of information",g:"Investigation",b:"Director may share information with listed agencies, and must share with the concerned agency where information shows contravention of other laws."},
+ {s:"71",t:"Overriding effect",g:"General",b:"PMLA has effect notwithstanding anything inconsistent in any other law."}
+];
+
+const FEMA=[
+ {s:"FEMA 3–4",t:"Dealing in and holding foreign exchange",b:"No person may deal in foreign exchange except through an authorised person, or acquire, hold or transfer foreign exchange or immovable property abroad except as permitted under the Act or RBI rules and regulations."},
+ {s:"FEMA 5–6",t:"Current and capital account transactions",b:"Current account transactions are free subject to restrictions notified by the Central Government. Capital account transactions are permitted as specified by the Government (non-debt) and RBI (debt)."},
+ {s:"FEMA 7–8",t:"Exports and repatriation",b:"Exporters must declare full export value and realise and repatriate proceeds within the prescribed time. Residents must realise and repatriate foreign exchange due to them."},
+ {s:"FEMA 13",t:"Penalties",b:"Up to three times the sum involved where quantifiable, or up to ₹2 lakh where not, plus up to ₹5,000 per day for a continuing contravention. Confiscation of currency, security or property involved may also be ordered."},
+ {s:"FEMA 15",t:"Compounding",b:"Contraventions may be compounded within 180 days of application by the Directorate of Enforcement or RBI officers as notified, and no further proceedings follow."},
+ {s:"FEMA 16",t:"Adjudication",b:"Adjudicating Authority holds inquiry after giving a reasonable opportunity of hearing, on a complaint in writing by an authorised officer."},
+ {s:"FEMA 17",t:"Appeal to Special Director (Appeals)",b:"Against orders of an Adjudicating Authority below the rank of Assistant Director, within 45 days of receipt; condonable on sufficient cause."},
+ {s:"FEMA 19",t:"Appeal to Appellate Tribunal",b:"Within 45 days of receipt of the order; condonable on sufficient cause. Pre-deposit of penalty applies unless waived."},
+ {s:"FEMA 35",t:"Appeal to High Court",b:"On a question of law, within 60 days of communication of the Tribunal's order, extendable by up to 60 days on sufficient cause."},
+ {s:"FEMA 37",t:"Investigation powers",b:"Officers of the Directorate have the powers of income-tax authorities for investigation of contraventions."},
+ {s:"FEMA 37A",t:"Seizure of equivalent assets in India",b:"Where foreign exchange, foreign security or immovable property abroad is suspected to be held in contravention of Section 4, equivalent value in India may be seized, subject to confirmation by the Competent Authority."},
+ {s:"FEOA 2, 4",t:"Fugitive economic offender",b:"A person with an arrest warrant for a scheduled offence of ₹100 crore or more who has left India or refuses to return to face prosecution. Director or Deputy Director files the application before the Special Court under Section 4."},
+ {s:"FEOA 5, 12",t:"Attachment and declaration",b:"Property may be attached with permission of the Special Court (and without, in urgency, with application within 30 days). On declaration under Section 12, proceeds of crime and property vest in the Central Government."},
+ {s:"FEOA 14",t:"Bar on civil claims",b:"A declared fugitive economic offender, and companies where they are promoter or key managerial person, may be barred from filing or defending civil claims."}
+];
+
+const CASES=[
+ {n:"Vijay Madanlal Choudhary v. Union of India",c:"Supreme Court (3-judge)",y:"27 Jul 2022",tags:["Validity","Arrest","Summons","ECIR"],b:"Upheld Sections 5, 8, 17, 19, 24, 45 and 50. ECIR is an internal document and need not be supplied; disclosure of reasons at the time of arrest is enough. Statements under Section 50 are not hit by Article 20(3). The PMLA offence depends on a scheduled offence: if the accused is discharged, acquitted or the scheduled case is quashed, there can be no money laundering case on that basis. Review petitions are pending; check their status."},
+ {n:"Pankaj Bansal v. Union of India",c:"Supreme Court",y:"3 Oct 2023",tags:["Arrest"],b:"Grounds of arrest under Section 19 must be furnished to the arrestee in writing, as a matter of course and without exception."},
+ {n:"Ram Kishor Arora v. Directorate of Enforcement",c:"Supreme Court",y:"15 Dec 2023",tags:["Arrest"],b:"The written-grounds requirement in Pankaj Bansal applies from 3 October 2023. For earlier arrests, informing the grounds (for example by letting the arrestee read them) was sufficient."},
+ {n:"Tarsem Lal v. Directorate of Enforcement",c:"Supreme Court",y:"16 May 2024",tags:["Arrest","Bail","Post-cognizance"],b:"After the Special Court takes cognizance of the complaint, ED cannot arrest under Section 19; it must apply to the Special Court for custody. An accused who appears on summons is not required to satisfy the Section 45 twin conditions."},
+ {n:"Arvind Kejriwal v. Directorate of Enforcement",c:"Supreme Court",y:"12 Jul 2024",tags:["Arrest","Bail"],b:"Courts may examine whether the reasons to believe under Section 19 are based on material and are valid. Interim bail was granted; questions on the need and necessity of arrest were referred to a larger Bench."},
+ {n:"Manish Sisodia v. Directorate of Enforcement",c:"Supreme Court",y:"9 Aug 2024",tags:["Bail","Delay"],b:"Long pre-trial custody with no likelihood of early trial violates the right to speedy trial under Article 21; bail granted despite Section 45."},
+ {n:"Prem Prakash v. Union of India",c:"Supreme Court",y:"28 Aug 2024",tags:["Summons","Evidence","Bail"],b:"A Section 50 statement recorded while the maker is in ED's custody, even in another case, is not admissible against the maker. Bail is the rule and jail the exception applies under PMLA too, subject to Section 45."},
+ {n:"V. Senthil Balaji v. Deputy Director, ED",c:"Supreme Court",y:"26 Sep 2024",tags:["Bail","Delay"],b:"Section 45 cannot be used to keep an accused in custody for an unreasonably long time when trial is unlikely to finish soon; constitutional courts can grant bail on that ground."},
+ {n:"Ram Kotumal Issrani v. Directorate of Enforcement",c:"Bombay High Court",y:"Apr 2024",tags:["Summons","Statements"],b:"Deprecated recording statements late into the night; the right to sleep is a basic human need. Statements should be recorded at reasonable hours."},
+ {n:"Radhika Agarwal v. Union of India",c:"Supreme Court (3-judge)",y:"27 Feb 2025",tags:["Arrest"],b:"On arrests under the Customs Act and CGST Act, applied safeguards similar to those in PMLA cases (reasons to believe, grounds of arrest). Not a PMLA case, but courts are citing it when testing PMLA arrests."},
+ {n:"Section 42 limitation: no condonation beyond 120 days",c:"Bombay High Court",y:"2025",tags:["Appeals"],b:"The proviso to Section 42 excludes Section 5 of the Limitation Act; a High Court cannot condone delay beyond 60 + 60 days."},
+ {n:"Section 20 retention order is mandatory",c:"Telangana HC (2022); Delhi HC (2025–26)",y:"2022–2026",tags:["Search & seizure","Retention"],b:"Retention beyond the initial period needs a Section 20 order sent to the Adjudicating Authority. Without it, continued retention and even the Section 8 adjudication may be vitiated. Confirmation under Section 8(3) then carries retention up to 365 days or until the trial ends."},
+ {n:"Bank accounts cannot be frozen on mere suspicion",c:"Supreme Court (dismissing ED appeal against Delhi HC, Nov 2025)",y:"Aug 2026",tags:["Search & seizure","Freezing"],b:"A freezing order needs material showing the account holds proceeds of crime; suspicion alone is not enough."},
+ {n:"Arvind Dham v. Directorate of Enforcement",c:"Supreme Court",y:"6 Jan 2026",tags:["Bail","Delay"],b:"Article 21 overrides indefinite pre-trial detention. Bail granted where trial was not likely to begin soon and delay was attributable to the prosecution."},
+ {n:"Sanjay Sureka v. Directorate of Enforcement",c:"Supreme Court",y:"2026",tags:["Bail","Arrest"],b:"Twin conditions cannot override Article 21. A five-day delay in forwarding arrest material to the Adjudicating Authority under Section 19(2) does not by itself make the arrest illegal."},
+ {n:"Failure to produce within 24 hours",c:"Chhattisgarh HC, upheld by Supreme Court",y:"2026",tags:["Arrest"],b:"Not producing the arrestee before the court within 24 hours under Section 19(3) made the arrest illegal; bail granted and upheld."},
+ {n:"PMLA applies to pre-2002 scheduled offences",c:"Delhi High Court",y:"16 Mar 2026",tags:["Offence"],b:"Money laundering is a continuing offence: PMLA can apply to proceeds still being enjoyed even if the scheduled offence predates the Act."}
+];
+
+const CHECKS=[
+ {id:"search",t:"Search and seizure (Section 17)",items:[
+  ["Reasons to believe recorded in writing by an officer not below Deputy Director, based on information in possession",""],
+  ["Search authorisation issued and carried",""],
+  ["Independent witnesses present; search conducted under BNSS procedure",""],
+  ["Panchnama and inventory of records and property prepared",""],
+  ["Copy of panchnama given to the person searched",""],
+  ["Freezing order issued where removal is not practicable (17(1A))",""],
+  ["Reasons and material sent to Adjudicating Authority in sealed envelope immediately (17(2))",""],
+  ["Retention or freezing order under Section 20 / 21, with reasons, before the 180 days run",""],
+  ["Application to Adjudicating Authority within 30 days (17(4))","Use the deadline calculator for the exact date"]
+ ]},
+ {id:"arrest",t:"Arrest (Section 19)",items:[
+  ["Check: has the Special Court taken cognizance? If yes, apply to court for custody instead","Tarsem Lal, 2024"],
+  ["Material in possession supports reasons to believe the person is guilty",""],
+  ["Reasons to believe recorded in writing",""],
+  ["Grounds of arrest furnished in writing; acknowledgement taken","Pankaj Bansal, 2023"],
+  ["Arrest memo prepared; relative or friend informed",""],
+  ["Medical examination arranged",""],
+  ["Copy of arrest order and material sent to Adjudicating Authority in sealed envelope (19(2))",""],
+  ["Produced before Special Court or Magistrate within 24 hours, excluding journey time (19(3))",""]
+ ]},
+ {id:"statement",t:"Summons and statement (Section 50)",items:[
+  ["Summons in writing, signed by an officer of Assistant Director rank or above",""],
+  ["Date and time give reasonable notice",""],
+  ["Time of arrival and departure recorded",""],
+  ["Statement recorded at reasonable hours, not late into the night","Ram Kotumal Issrani, Bombay HC 2024"],
+  ["Person not in ED custody at the time, or court permission obtained where required","Prem Prakash, 2024"],
+  ["Statement read over, corrections allowed, signed on each page",""],
+  ["Documents produced listed and receipted",""]
+ ]},
+ {id:"pao",t:"Provisional attachment (Section 5)",items:[
+  ["Order by Director or Deputy Director and above",""],
+  ["Reasons to believe recorded in writing: proceeds of crime, and likely to be concealed or transferred",""],
+  ["Link between the property and the scheduled offence documented",""],
+  ["Report or complaint for the scheduled offence forwarded, or urgency proviso reasons recorded",""],
+  ["Copy of order and material to Adjudicating Authority in sealed envelope immediately (5(2))",""],
+  ["Order served on the person; registering authority informed for immovable property",""],
+  ["Original complaint before Adjudicating Authority within 30 days (5(5))",""],
+  ["Track 180-day validity until confirmation",""]
+ ]},
+ {id:"pc",t:"Prosecution complaint (Section 44)",items:[
+  ["Scheduled offence status checked: FIR or complaint subsists, not quashed or closed","Vijay Madanlal, 2022"],
+  ["Proceeds of crime quantified and traced",""],
+  ["Role of each accused set out against the Section 3 activities",""],
+  ["Relied-upon documents and list of witnesses annexed",""],
+  ["Filed before the Special Court with territorial jurisdiction",""],
+  ["For attached property: complaint filed within 365 days of confirmation, after excluding stay periods (8(3))",""]
+ ]}
+];
+
+const SCHED=[
+ ["Indian Penal Code / BNS","Selected offences such as criminal conspiracy, cheating, forgery, extortion, robbery and dacoity, counterfeiting, murder for gain. Check how the Schedule maps to BNS sections for offences after 1 July 2024."],
+ ["Prevention of Corruption Act, 1988","Bribery and criminal misconduct by public servants."],
+ ["Narcotic Drugs and Psychotropic Substances Act, 1985","Trafficking and related offences. Punishment under PMLA goes up to 10 years."],
+ ["Unlawful Activities (Prevention) Act, 1967","Terrorist acts, funding and related offences."],
+ ["Arms Act, 1959; Explosive Substances Act, 1908; Explosives Act, 1884","Weapons and explosives offences."],
+ ["Customs Act, 1962","Smuggling and related offences (Part A); false declaration under Section 132 in Part B, where the value is ₹1 crore or more."],
+ ["SEBI Act, 1992","Market manipulation and insider trading offences."],
+ ["Companies Act, 2013","Fraud under Section 447."],
+ ["Black Money Act, 2015","Wilful attempt to evade tax under Section 51."],
+ ["Information Technology Act, 2000","Selected cyber offences."],
+ ["Copyright Act, 1957; Trade Marks Act, 1999","Infringement offences."],
+ ["Wild Life (Protection) Act, 1972","Poaching and trade in protected species."],
+ ["Immoral Traffic (Prevention) Act; Juvenile Justice Act; Transplantation of Human Organs Act","Trafficking and exploitation offences."],
+ ["Passports Act; Emigration Act; Foreigners Act","Travel document and illegal emigration offences."],
+ ["Antiquities and Art Treasures Act, 1972","Illegal export and dealing in antiquities."],
+ ["Environment, Water and Air Acts; Biological Diversity Act","Selected environmental offences."]
+];
+const PARTS=[
+ ["Part A","Listed offences under the Acts below. Any amount."],
+ ["Part B","Section 132 of the Customs Act (false declaration). A scheduled offence only if the total value involved is ₹1 crore or more."],
+ ["Part C","An offence with cross-border implications under Part A, or under Chapter XVII of the IPC (offences against property) and its BNS equivalent, among others."]
+];
+
+// Deadline events: offsets in days unless h (hours)
+const EVENTS=[
+ {k:"pao",t:"Provisional attachment order (Section 5)",items:[
+  {d:0,w:"Send order and material to Adjudicating Authority",r:"Section 5(2): immediately, in sealed envelope"},
+  {d:30,w:"File complaint before Adjudicating Authority",r:"Section 5(5): within 30 days of attachment"},
+  {d:180,w:"Attachment lapses unless confirmed",r:"Section 5(1), 5(3): provisional order valid up to 180 days"}]},
+ {k:"seize",t:"Search, seizure or freezing (Section 17)",items:[
+  {d:0,w:"Send reasons and material to Adjudicating Authority",r:"Section 17(2): immediately after search"},
+  {d:30,w:"Application to Adjudicating Authority",r:"Section 17(4): within 30 days of seizure or freezing"},
+  {d:180,w:"Retention or freezing ends unless Adjudicating Authority permits",r:"Section 20(1), 20(3) (property) and 21 (records): up to 180 days"}]},
+ {k:"notice",t:"Show-cause notice by Adjudicating Authority (Section 8(1))",items:[
+  {d:30,w:"Earliest date the noticee's reply period ends",r:"Section 8(1): notice of not less than 30 days"}]},
+ {k:"confirm",t:"Confirmation order by Adjudicating Authority (Section 8(3))",ex:true,items:[
+  {d:45,w:"Last day to appeal to Appellate Tribunal",r:"Section 26(3): within 45 days of receipt; delay condonable on sufficient cause"},
+  {d:365,w:"Confirmed attachment ends unless proceedings are pending before a court",r:"Section 8(3)(a): up to 365 days during investigation; stay periods excluded",stay:true}]},
+ {k:"at",t:"Appellate Tribunal order communicated (PMLA)",items:[
+  {d:60,w:"Last day to appeal to High Court",r:"Section 42: within 60 days of communication"},
+  {d:120,w:"Absolute outer limit with condonation",r:"Proviso to Section 42: further period up to 60 days only"}]},
+ {k:"fema",t:"FEMA adjudication order received",items:[
+  {d:45,w:"Last day to appeal (Special Director (Appeals) or Appellate Tribunal)",r:"FEMA Sections 17 and 19: within 45 days; condonable on sufficient cause"}]},
+ {k:"fema_at",t:"FEMA Appellate Tribunal order communicated",items:[
+  {d:60,w:"Last day to appeal to High Court",r:"FEMA Section 35: 60 days on a question of law"},
+  {d:120,w:"Outer limit with condonation",r:"Proviso to Section 35: further 60 days"}]},
+ {k:"arrest",t:"Arrest under Section 19 (date and time)",dt:true,items:[
+  {d:0,w:"Furnish grounds of arrest in writing",r:"Pankaj Bansal (2023): at the time of arrest"},
+  {d:0,w:"Send arrest order and material to Adjudicating Authority",r:"Section 19(2): sealed envelope"},
+  {h:24,w:"Produce before Special Court or Magistrate",r:"Section 19(3): within 24 hours, journey time excluded"}]}
+];
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+// Tabs
+function show(id){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+id));
+  document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===id));
+  if(id!=="search"&&location.hash!=="#"+id){history.replaceState(null,"","#"+id)}
+  window.scrollTo(0,0);
+}
+$("#tabs").innerHTML=TABS.map(([k,l])=>`<button role="tab" data-t="${k}" type="button">${l}</button>`).join("");
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(b){$("#q").value="";show(b.dataset.t)}});
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(TABS.some(t=>t[0]===h))show(h)});
+
+// Home
+const TILES=[["deadlines","Deadline calculator","Dates from any event"],["pmla","PMLA sections","Plain summaries"],["cases","Case law","Arrest, bail, retention"],["check","Checklists","Search, arrest, s.50"],["sched","Scheduled offences","Which Acts count"],["fema","FEMA / FEOA","Penalties, appeals"]];
+$("#tiles").innerHTML=TILES.map(([k,t,s])=>`<button class="tile" type="button" data-t="${k}"><b>${t}</b><span>${s}</span></button>`).join("");
+$("#tiles").addEventListener("click",e=>{const b=e.target.closest(".tile");if(b)show(b.dataset.t)});
+const GLANCE=[["24 hours","Produce arrestee before court","19(3)"],["30 days","Complaint to AA after attachment","5(5)"],["30 days","Application to AA after seizure","17(4)"],["180 days","Provisional attachment validity","5(1)"],["180 days","Retention of seized property / records","20, 21"],["365 days","Confirmed attachment during investigation","8(3)(a)"],["45 days","Appeal to Appellate Tribunal","26"],["60 + 60 days","Appeal to High Court","42"]];
+$("#glance").innerHTML=GLANCE.map(([n,t,s])=>`<div class="card row" style="justify-content:space-between"><div><b style="font-family:var(--font-display);font-size:18px">${n}</b><div style="color:var(--muted);font-size:14px">${t}</div></div><span class="sec">s. ${s}</span></div>`).join("");
+
+// PMLA
+const groups=["All",...new Set(PMLA.map(x=>x.g))];let pg="All";
+function renderPMLA(){
+  $("#pmla-f").innerHTML=groups.map(g=>`<button class="chip" type="button" aria-pressed="${g===pg}" data-g="${esc(g)}">${esc(g)}</button>`).join("");
+  $("#pmla-out").innerHTML=PMLA.filter(x=>pg==="All"||x.g===pg).map(secCard).join("");
+}
+const secCard=x=>`<article class="card"><div class="row"><span class="sec">s. ${esc(x.s)}</span><h3>${esc(x.t)}</h3></div><p>${esc(x.b)}</p></article>`;
+$("#pmla-f").addEventListener("click",e=>{const b=e.target.closest(".chip");if(b){pg=b.dataset.g;renderPMLA()}});
+renderPMLA();
+$("#fema-out").innerHTML=FEMA.map(x=>`<article class="card"><div class="row"><span class="sec">${esc(x.s)}</span><h3>${esc(x.t)}</h3></div><p>${esc(x.b)}</p></article>`).join("");
+
+// Cases
+const ctags=["All",...new Set(CASES.flatMap(c=>c.tags))];let ct="All";
+const caseCard=c=>`<article class="card"><div class="court">${esc(c.c)} · ${esc(c.y)}</div><h3 style="margin-top:4px">${esc(c.n)}</h3><p>${esc(c.b)}</p><div class="tags">${c.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div></article>`;
+function renderCases(){
+  $("#case-f").innerHTML=ctags.map(g=>`<button class="chip" type="button" aria-pressed="${g===ct}" data-g="${esc(g)}">${esc(g)}</button>`).join("");
+  $("#case-out").innerHTML=CASES.filter(c=>ct==="All"||c.tags.includes(ct)).map(caseCard).join("");
+}
+$("#case-f").addEventListener("click",e=>{const b=e.target.closest(".chip");if(b){ct=b.dataset.g;renderCases()}});
+renderCases();
+
+// Checklists
+let ticks=store.get("pd-ticks",{});
+function renderChecks(){
+  $("#check-out").innerHTML=CHECKS.map(c=>{
+    const done=c.items.filter((_,i)=>ticks[c.id+i]).length;
+    return `<article class="card"><div class="row" style="justify-content:space-between"><h3>${esc(c.t)}</h3><span class="pill ${done===c.items.length?"ok":"info"}">${done}/${c.items.length}</span></div><ul class="check">${c.items.map(([t,n],i)=>`<li><input type="checkbox" id="ck-${c.id}-${i}" data-k="${c.id+i}" ${ticks[c.id+i]?"checked":""}><label for="ck-${c.id}-${i}" style="font-weight:400;font-size:14px;margin:0">${esc(t)}${n?`<small>${esc(n)}</small>`:""}</label></li>`).join("")}</ul></article>`;
+  }).join("");
+}
+$("#check-out").addEventListener("change",e=>{const k=e.target.dataset.k;if(!k)return;ticks[k]=e.target.checked;store.set("pd-ticks",ticks);renderChecks()});
+$("#clear-checks").addEventListener("click",()=>{ticks={};store.set("pd-ticks",ticks);renderChecks()});
+renderChecks();
+
+// Scheduled offences
+$("#sched-parts").innerHTML=PARTS.map(([p,b])=>`<article class="card"><span class="sec">${p}</span><p>${esc(b)}</p></article>`).join("");
+$("#sched-out").innerHTML=SCHED.map(([a,b])=>`<article class="card"><h3>${esc(a)}</h3><p>${esc(b)}</p></article>`).join("");
+
+// Deadlines
+const fmt=d=>d.toLocaleDateString("en-IN",{weekday:"short",day:"2-digit",month:"short",year:"numeric"});
+const fmtT=d=>d.toLocaleString("en-IN",{weekday:"short",day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+const today=()=>{const t=new Date();t.setHours(0,0,0,0);return t};
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+$("#ev").innerHTML=EVENTS.map(e=>`<option value="${e.k}">${esc(e.t)}</option>`).join("");
+$("#d").value=iso(today());
+function addDays(base,n){const d=new Date(base);d.setDate(d.getDate()+n);return d}
+function status(target,isTime){
+  const now=isTime?new Date():today();
+  const diff=isTime?(target-now)/36e5:Math.round((target-now)/864e5);
+  if(diff<0)return ["bad",isTime?"Time passed":`${-diff} day${diff===-1?"":"s"} ago`];
+  if(isTime)return [diff<=6?"warn":"ok",`${Math.floor(diff)} h ${Math.round((diff%1)*60)} min left`];
+  if(diff===0)return ["warn","Today"];
+  return [diff<=15?"warn":"ok",`${diff} day${diff===1?"":"s"} left`];
+}
+let lastText="";
+function renderTL(){
+  const ev=EVENTS.find(e=>e.k===$("#ev").value);
+  const dIn=$("#d");
+  const wantType=ev.dt?"datetime-local":"date";
+  if(dIn.type!==wantType){const old=dIn.value;dIn.type=wantType;dIn.value=ev.dt?(old.slice(0,10)+"T"+new Date().toTimeString().slice(0,5)):old.slice(0,10)}
+  $("#date-wrap label").textContent=ev.dt?"Date and time of arrest":"Date of event";
+  $("#extra-wrap").style.display=ev.ex?"":"none";
+  if(!dIn.value){$("#tl").innerHTML=`<li><span class="what">Enter a date to see deadlines.</span></li>`;return}
+  const base=ev.dt?new Date(dIn.value):new Date(dIn.value+"T00:00:00");
+  if(isNaN(base)){$("#tl").innerHTML=`<li><span class="what">That date could not be read. Pick it again from the calendar.</span></li>`;return}
+  const stay=Math.max(0,parseInt($("#ex").value||"0",10)||0);
+  const lines=[`${ev.t}: ${ev.dt?fmtT(base):fmt(base)}`];
+  $("#tl").innerHTML=ev.items.map(it=>{
+    let when,cls,lab,txt;
+    if(it.h){const t=new Date(base.getTime()+it.h*36e5);[cls,lab]=status(t,true);when=fmtT(t);txt=when}
+    else if(it.d===0){cls="info";lab="Immediately";when="Same day";txt="Immediately"}
+    else{const t=addDays(ev.dt?new Date(base.toDateString()):base,it.d+(it.stay?stay:0));[cls,lab]=status(t,false);when=fmt(t);txt=when}
+    lines.push(`- ${it.w}: ${txt} (${it.r})`);
+    return `<li class="${cls==="info"?"":cls}"><div><div class="what">${esc(it.w)}</div></div><div class="when">${esc(when)}<br><span class="pill ${cls}">${esc(lab)}</span></div><div class="why">${esc(it.r)}${it.stay&&stay?` · ${stay} stay day${stay===1?"":"s"} added`:""}</div></li>`;
+  }).join("");
+  lastText=lines.join("\n");
+}
+["#ev","#d","#ex"].forEach(s=>$(s).addEventListener("input",renderTL));
+$("#copy-tl").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(lastText);$("#copy-msg").textContent="Copied."}catch(e){$("#copy-msg").textContent="Copy is blocked here. Select the dates and copy them manually."}});
+renderTL();
+
+// Notes
+let notes=store.get("pd-notes",[]);
+function renderNotes(){
+  $("#notes").innerHTML=notes.length?notes.map((n,i)=>`<div class="card"><div><div class="court">${esc(n.d)}</div>${esc(n.t)}</div><button class="x" type="button" data-i="${i}">Delete</button></div>`).join(""):`<p class="empty">No notes yet. Saved notes appear here, newest first.</p>`;
+}
+$("#note-add").addEventListener("click",()=>{const t=$("#note-t").value.trim();if(!t){$("#note-msg").textContent="Write something first.";return}notes.unshift({t,d:new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"})});store.set("pd-notes",notes);$("#note-t").value="";$("#note-msg").textContent="Saved in this browser.";renderNotes()});
+$("#notes").addEventListener("click",e=>{const b=e.target.closest(".x");if(!b)return;notes.splice(+b.dataset.i,1);store.set("pd-notes",notes);renderNotes()});
+renderNotes();
+
+// Global search
+const INDEX=[
+ ...PMLA.map(x=>({type:"PMLA section",tab:"pmla",text:`${x.s} ${x.t} ${x.b} ${x.g}`,html:secCard(x)})),
+ ...FEMA.map(x=>({type:"FEMA / FEOA",tab:"fema",text:`${x.s} ${x.t} ${x.b}`,html:`<article class="card"><div class="row"><span class="sec">${esc(x.s)}</span><h3>${esc(x.t)}</h3></div><p>${esc(x.b)}</p></article>`})),
+ ...CASES.map(c=>({type:"Case law",tab:"cases",text:`${c.n} ${c.c} ${c.y} ${c.b} ${c.tags.join(" ")}`,html:caseCard(c)})),
+ ...CHECKS.flatMap(c=>c.items.map(([t,n])=>({type:"Checklist · "+c.t,tab:"check",text:`${c.t} ${t} ${n}`,html:`<article class="card"><h3>${esc(c.t)}</h3><p>${esc(t)}${n?` <span style="color:var(--muted)">(${esc(n)})</span>`:""}</p></article>`}))),
+ ...SCHED.map(([a,b])=>({type:"Scheduled offence",tab:"sched",text:`${a} ${b}`,html:`<article class="card"><h3>${esc(a)}</h3><p>${esc(b)}</p></article>`}))
+];
+let prevTab="home";
+$("#q").addEventListener("input",e=>{
+  const q=e.target.value.trim().toLowerCase();
+  if(!q){show(prevTab);return}
+  const cur=document.querySelector(".panel.on");if(cur&&cur.id!=="p-search")prevTab=cur.id.slice(2);
+  const terms=q.split(/\s+/);
+  const hits=INDEX.filter(x=>{const t=x.text.toLowerCase();return terms.every(w=>t.includes(w))});
+  $("#search-count").textContent=hits.length?`${hits.length} result${hits.length===1?"":"s"} for "${e.target.value.trim()}"`:"";
+  $("#search-out").innerHTML=hits.length?hits.map(h=>`<div><div class="result-type">${esc(h.type)}</div>${h.html}</div>`).join(""):`<p class="empty">Nothing matches "${esc(e.target.value.trim())}". Try a section number like 19, or a word like retention.</p>`;
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-search"));
+  document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected","false"));
+});
+
+const start=location.hash.slice(1);
+show(TABS.some(t=>t[0]===start)?start:"home");
+</script>
+</body>
+</html>
