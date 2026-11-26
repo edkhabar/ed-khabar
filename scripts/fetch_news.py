@@ -101,8 +101,7 @@ def parse_rss(xml_bytes, lang):
 
 # ---------- ED ki official website (press releases) ----------
 ED_PAGES = [
-    "https://enforcementdirectorate.gov.in/press-release",
-    "https://enforcementdirectorate.gov.in/press-release?page=1",
+    "https://www.enforcementdirectorate.gov.in/media/press-release/",
 ]
 ED_DATE = re.compile(r"(\d{1,2})/([A-Za-z]{3})[a-z]*/(\d{4})")
 MONTHS = {m: i for i, m in enumerate(
