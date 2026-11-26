@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ED Khabar – Every ED action, one place</title>
-<meta name="description" content="Latest Enforcement Directorate (ED) news: official press releases, raids, arrests, summons, property attachments and court updates, in English and Hindi. Updated automatically.">
+<meta name="description" content="Latest Enforcement Directorate (ED) news: raids, arrests, summons, property attachments and court updates, in English and Hindi. Updated automatically.">
 <link rel="canonical" href="https://edkhabar.in/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ED Khabar">
 <meta property="og:title" content="ED Khabar – Every ED action, one place">
-<meta property="og:description" content="Official ED press releases and the latest news on raids, arrests, summons and attachments, in English & Hindi.">
+<meta property="og:description" content="The latest news on ED raids, arrests, summons, attachments and court cases, in English & Hindi.">
 <meta property="og:url" content="https://edkhabar.in/">
 <meta property="og:image" content="https://edkhabar.in/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ED Khabar – Every ED action, one place">
-<meta name="twitter:description" content="Official ED press releases and the latest ED news, in English & Hindi.">
+<meta name="twitter:description" content="The latest Enforcement Directorate news, in English & Hindi.">
 <meta name="twitter:image" content="https://edkhabar.in/og-image.png">
 <meta name="theme-color" content="#14213d">
 <link rel="manifest" href="manifest.webmanifest">
@@ -248,10 +248,10 @@ footer a{color:var(--peach)}
   <!-- ABOUT US -->
   <section id="view-about" class="hidden page">
     <h2>About ED Khabar</h2>
-    <p>ED Khabar brings together news about the Directorate of Enforcement (ED) in one place: the ED's official press releases, and reporting from news outlets in English and Hindi on raids, arrests, summons, property attachments and court proceedings.</p>
+    <p>ED Khabar brings together news about the Directorate of Enforcement (ED) in one place: reporting from news outlets in English and Hindi on raids, arrests, summons, property attachments and court proceedings, with a direct link to the ED's official press releases.</p>
     <h3>How it works</h3>
     <ul>
-      <li>Official press releases are taken from the ED's website, with permission, and link to the original document.</li>
+      <li>For official information, the "Official ED press releases" button opens the ED's own press release page.</li>
       <li>News headlines are collected automatically from Google News every two hours. Every story opens at its original publisher.</li>
       <li>Labels such as "Raids" or "ED statement" are added automatically from the headline and may occasionally be wrong.</li>
     </ul>
@@ -271,7 +271,7 @@ footer a{color:var(--peach)}
       <div class="mark" style="width:36px;height:36px;border-radius:9px" aria-hidden="true"><svg viewBox="0 0 40 40" style="width:28px;height:28px"><text x="20" y="23" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="19" fill="#fff">ED</text><rect x="9" y="28" width="22" height="2.6" fill="#d9480f"/></svg></div>
       <b>ED Khabar</b>
     </div>
-    <p>An independent news aggregator. Not affiliated with the Directorate of Enforcement or the Government of India. Headlines link to their original publishers; official releases link to the ED's website.</p>
+    <p>An independent news aggregator. Not affiliated with the Directorate of Enforcement or the Government of India. Headlines link to their original publishers.</p>
     <p style="margin-top:8px">Last updated: <span id="lastup">—</span> · <a href="#" data-goto="about">About us</a></p>
   </div>
 </footer>
@@ -284,7 +284,7 @@ const CONTACT_EMAIL = '';
 const CAT_EN = {'छापेमारी':'Raids','गिरफ़्तारी':'Arrests','समन':'Summons','कुर्की':'Attachments','अदालत':'Court','FEMA':'FEMA','अन्य':'Other'};
 const catOf = n => CAT_EN[n.category] || n.category || 'Other';
 const CATS = ['All','Raids','Arrests','Summons','Attachments','Court','FEMA','Other'];
-const LANGS = [['all','All sources'],['official','🏛 ED official & statements'],['en','English'],['hi','हिंदी']];
+const LANGS = [['all','All sources'],['official','📢 ED statements'],['en','English'],['hi','हिंदी']];
 const PAGE = 30;
 let NEWS = [], cat = 'All', q = '', lang = 'all', shown = PAGE;
 let saved = [];
@@ -343,12 +343,12 @@ function leadCard(n){
 }
 function stats(){
   const day = NEWS.filter(n => Date.now()-new Date(n.published) < 864e5).length;
-  const off = NEWS.filter(n => n.official && Date.now()-new Date(n.published) < 7*864e5).length;
+  const off = NEWS.filter(n => (n.official || n.statement) && Date.now()-new Date(n.published) < 7*864e5).length;
   const week = NEWS.filter(n => Date.now()-new Date(n.published) < 7*864e5).length;
   $('stats').innerHTML = `
     <div class="stat"><b>${day}</b><span>Stories, last 24 hrs</span></div>
     <div class="stat"><b>${week}</b><span>Stories this week</span></div>
-    <div class="stat"><b>${off}</b><span>ED releases this week</span></div>`;
+    <div class="stat"><b>${off}</b><span>ED statements this week</span></div>`;
 }
 function filtered(){
   const ql = q.toLowerCase();
