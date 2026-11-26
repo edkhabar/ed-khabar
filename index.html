@@ -91,13 +91,12 @@ footer{margin-top:36px;background:var(--ink);color:#cfd5e2;padding:20px 0;font-s
 footer b{color:#fff}
 .hidden{display:none}
 .tag.off{background:#e7f0ff;color:#1d4ed8}
-.install{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:12px;padding:12px 14px;margin:14px 0 0}
-.install img{width:44px;height:44px;border-radius:10px}
-.install div{flex:1;font-size:.92rem}
-.install b{display:block}
-.install button{font:inherit;font-weight:700;border:none;border-radius:8px;padding:8px 14px;cursor:pointer}
-.install .go{background:var(--accent);color:#fff}
-.install .x{background:none;color:var(--muted);padding:8px}
+.official{display:flex;align-items:center;gap:12px;background:#14213d;color:#fff;text-decoration:none;border-radius:12px;padding:14px 16px;margin:4px 0 14px}
+.official .ic{font-size:1.6rem}
+.official b{display:block;font-size:1.02rem}
+.official small{display:block;opacity:.8;font-size:.84rem}
+.official .arr{margin-left:auto;font-size:1.3rem;color:#ffb38a}
+.official:hover{background:#1d2f57}
 .offline{background:#fff3cd;color:#664d03;text-align:center;font-size:.85rem;padding:6px}
 </style>
 </head>
@@ -120,12 +119,6 @@ footer b{color:#fff}
 <div class="offline hidden" id="offline">You're offline. Showing the last saved news.</div>
 
 <main class="wrap">
-  <div class="install hidden" id="installBar">
-    <img src="icons/icon-192.png" alt="">
-    <div><b>Get the ED Khabar app</b><span id="installHint">Free · works offline · no Play Store needed</span></div>
-    <button class="go" id="installBtn">Install</button>
-    <button class="x" id="installClose" aria-label="Close">✕</button>
-  </div>
   <nav class="tabs" role="tablist">
     <button class="on" data-view="news">📰 News</button>
     <button data-view="saved">⭐ Saved</button>
@@ -134,6 +127,11 @@ footer b{color:#fff}
   </nav>
 
   <section id="view-news">
+    <a class="official" href="https://enforcementdirectorate.gov.in/press-release" target="_blank" rel="noopener">
+      <span class="ic">🏛</span>
+      <span><b>Official ED press releases</b><small>Read every press release on the Directorate of Enforcement's own website</small></span>
+      <span class="arr">→</span>
+    </a>
     <div class="stats" id="stats"></div>
     <div class="controls">
       <input class="search" id="q" type="search" placeholder="Search: state, name, case… (e.g. Punjab, Kolkata)">
@@ -204,7 +202,7 @@ footer b{color:#fff}
 const CAT_EN = {'छापेमारी':'Raids','गिरफ़्तारी':'Arrests','समन':'Summons','कुर्की':'Attachments','अदालत':'Court','FEMA':'FEMA','अन्य':'Other'};
 const catOf = n => CAT_EN[n.category] || n.category || 'Other';
 const CATS = ['All','Raids','Arrests','Summons','Attachments','Court','FEMA','Other'];
-const LANGS = [['all','All sources'],['official','🏛 ED official'],['en','English only'],['hi','Hindi only']];
+const LANGS = [['all','All sources'],['official','🏛 ED official & statements'],['en','English only'],['hi','Hindi only']];
 let NEWS = [], cat = 'All', q = '', lang = 'all';
 let saved = [];
 try { saved = JSON.parse(localStorage.getItem('edk_saved') || '[]'); } catch(e) {}
@@ -226,7 +224,7 @@ function stats(){
 }
 function card(n, lead){
   const on = saved.includes(n.url);
-  const lg = (n.official ? '<span class="tag off">🏛 ED Official</span>' : '') + (n.lang === 'hi' ? '<span>Hindi</span>' : '<span>EN</span>');
+  const lg = (n.official ? '<span class="tag off">🏛 ED Official</span>' : n.statement ? '<span class="tag off">📢 ED statement</span>' : '') + (n.lang === 'hi' ? '<span>Hindi</span>' : '<span>EN</span>');
   return `<article class="card${lead?' lead':''}" lang="${n.lang==='hi'?'hi':'en'}">
     <button class="save" data-url="${esc(n.url)}" aria-label="Save story">${on?'★':'☆'}</button>
     <div class="meta"><span class="tag">${esc(catOf(n))}</span><span>${esc(n.source)}</span>${lg}<span title="${fmt(n.published)}">🕒 ${ago(n.published)}</span></div>
@@ -241,7 +239,7 @@ function render(){
     `<button class="chip${c===cat?' on':''}" data-cat="${c}">${c}</button>`).join('');
   const ql = q.toLowerCase();
   const items = NEWS.filter(n =>
-    (cat==='All' || catOf(n)===cat) && (lang==='all' || (lang==='official' ? n.official : n.lang===lang)) &&
+    (cat==='All' || catOf(n)===cat) && (lang==='all' || (lang==='official' ? (n.official || n.statement) : n.lang===lang)) &&
     (!ql || (n.title+' '+n.source).toLowerCase().includes(ql)));
   document.getElementById('list').innerHTML = items.length
     ? items.slice(0,150).map((n,i) => card(n, i===0 && cat==='All' && !q)).join('')
@@ -281,27 +279,7 @@ setInterval(load, 15*60*1000);
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
-const bar = document.getElementById('installBar');
-const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-let dismissed = false; try { dismissed = localStorage.getItem('edk_install_x') === '1'; } catch(e) {}
-let deferred = null;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); deferred = e;
-  if (!standalone && !dismissed) bar.classList.remove('hidden');
-});
-document.getElementById('installBtn').addEventListener('click', async () => {
-  if (deferred) { deferred.prompt(); await deferred.userChoice; deferred = null; bar.classList.add('hidden'); }
-});
-document.getElementById('installClose').addEventListener('click', () => {
-  bar.classList.add('hidden'); try { localStorage.setItem('edk_install_x','1'); } catch(e) {}
-});
-// iPhone: Safari has no install button, so show how to add it
-if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !standalone && !dismissed) {
-  document.getElementById('installHint').textContent = 'Tap Share ⎋ then "Add to Home Screen"';
-  document.getElementById('installBtn').classList.add('hidden');
-  bar.classList.remove('hidden');
-}
-window.addEventListener('appinstalled', () => bar.classList.add('hidden'));
+
 const off = document.getElementById('offline');
 const net = () => off.classList.toggle('hidden', navigator.onLine);
 addEventListener('online', net); addEventListener('offline', net); net();
