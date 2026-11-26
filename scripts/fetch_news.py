@@ -24,6 +24,7 @@ MAX_ITEMS = 300
 FEEDS = [
     ("en", "en-IN", "IN:en", '"Enforcement Directorate" when:7d'),
     ("en", "en-IN", "IN:en", '"ED" (PMLA OR FEMA OR "money laundering") when:7d'),
+    ("en", "en-IN", "IN:en", '"Enforcement Directorate" ("said in a statement" OR "ED said" OR "press release" OR "statement") when:7d'),
     ("hi", "hi", "IN:hi", '"प्रवर्तन निदेशालय" OR "ईडी" छापेमारी OR "ED" PMLA when:7d'),
 ]
 
@@ -49,6 +50,13 @@ def fetch(url):
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ED-Khabar-bot", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"})
     with urllib.request.urlopen(req, timeout=30) as r:
         return r.read()
+
+
+# Headline mein ED ke apne bayan ka zikr ho to "ED statement" label lagta hai
+STATEMENT_RE = re.compile(
+    r"\bED (said|says|stated|claims|alleges|told)\b|according to (the )?ED\b|\bED statement|"
+    r"statement|press release|\bED:|ईडी ने कहा|ईडी का दावा|ईडी के मुताबिक|ईडी के अनुसार|बयान",
+    re.I)
 
 
 def categorize(text):
@@ -206,6 +214,8 @@ def main():
     merged, seen = [], set()
     for item in sorted(fresh + load_existing(), key=lambda x: x["published"], reverse=True):
         item["category"] = categorize(item["title"])
+        if not item.get("official"):
+            item["statement"] = bool(STATEMENT_RE.search(item["title"]))
         key = norm(item["title"])
         if key in seen:
             continue
