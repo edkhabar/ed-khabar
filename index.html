@@ -21,6 +21,8 @@
 <meta name="theme-color" content="#14213d">
 <script>try{var t=localStorage.getItem('edk_theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
+<!-- Visitors ki ginti (GoatCounter). "edkhabar" ki jagah apna GoatCounter code likhein -->
+<script data-goatcounter="https://edkhabar.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -652,17 +654,27 @@ function renderDigest(){
   $('dgWa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
   $('dgCopy').dataset.text = text;
 }
+// ---- visitors: kaunsi khabrein padhi gayi, kaunse section khule ----
+function gc(path, title){ try { if (window.goatcounter && goatcounter.count) goatcounter.count({path, title, event:true}); } catch(e) {} }
 function toast(t){ const el=$('toast'); el.textContent=t; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),1700); }
 function show(view, push=true){
   if (!VIEWS.includes(view)) view = 'news';
   document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('on', b.dataset.view===view));
   VIEWS.forEach(v => $('view-'+v).classList.toggle('hidden', v!==view));
   if (view==='digest') renderDigest();
-  if (push) history.replaceState(null, '', view==='news' ? location.pathname + location.search : '#'+view);
+  if (push){ history.replaceState(null, '', view==='news' ? location.pathname + location.search : '#'+view); gc('section/'+view, 'Opened '+view); }
   scrollTo({top:0});
 }
 async function copy(text, okMsg){ try { await navigator.clipboard.writeText(text); toast(okMsg); } catch(err){ toast('Could not copy'); } }
 document.addEventListener('click', async e => {
+  const rd = e.target.closest('a.src, .card h2 a, .lead-title a, .dg h3 a, .rel a, .official');
+  if (rd){
+    const art = rd.closest('article');
+    const t = rd.classList.contains('official') ? 'Official ED press releases button'
+      : (rd.closest('.rel') ? rd.firstChild.textContent : (art && art.querySelector('h2,h3,.lead-title') || rd).textContent);
+    gc(rd.classList.contains('official') ? 'click/official-press-releases' : 'read/' + (rd.classList.contains('src') ? 'source' : 'story'), (t||'').trim().slice(0,150));
+  }
+  const shr = e.target.closest('.sh, #dgWa, #shareSaved'); if (shr) gc('share/' + (shr.id || shr.title || 'link'), 'Share click');
   const c = e.target.closest('[data-cat]'); if (c){ cat = c.dataset.cat; shown = PAGE; render(); return; }
   const l = e.target.closest('[data-lang]'); if (l){ lang = l.dataset.lang; shown = PAGE; render(); return; }
   const tr = e.target.closest('[data-trend]'); if (tr){ q = tr.dataset.trend; $('q').value = q; shown = PAGE; render(); $('q').scrollIntoView({behavior:'smooth',block:'center'}); return; }
