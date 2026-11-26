@@ -144,7 +144,7 @@ def main():
         "items": merged[:MAX_ITEMS],
     }
     with open(OUT, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=1)
+        json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
     print(f"{len(fresh)} nayi entries mili, kul {len(data['items'])} khabrein save hui.")
     return 0
 
