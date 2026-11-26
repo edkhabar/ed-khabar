@@ -13,6 +13,7 @@ import sys
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+from html.parser import HTMLParser
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "news.json")
@@ -45,7 +46,7 @@ def feed_url(hl, ceid, q):
 
 
 def fetch(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (ED-Khabar bot)"})
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ED-Khabar-bot", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"})
     with urllib.request.urlopen(req, timeout=30) as r:
         return r.read()
 
@@ -90,6 +91,91 @@ def parse_rss(xml_bytes, lang):
     return items
 
 
+# ---------- ED ki official website (press releases) ----------
+ED_PAGES = [
+    "https://enforcementdirectorate.gov.in/press-release",
+    "https://enforcementdirectorate.gov.in/press-release?page=1",
+]
+ED_DATE = re.compile(r"(\d{1,2})/([A-Za-z]{3})[a-z]*/(\d{4})")
+MONTHS = {m: i for i, m in enumerate(
+    ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"], 1)}
+
+
+class _Rows(HTMLParser):
+    """Har <tr> ke cells ka text aur usme ke links jama karta hai."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.rows, self.row, self.cell, self.links, self.in_cell = [], None, [], [], False
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "tr":
+            self.row, self.links = [], []
+        elif tag in ("td", "th") and self.row is not None:
+            self.in_cell, self.cell = True, []
+        elif tag == "a" and self.row is not None:
+            href = dict(attrs).get("href")
+            if href:
+                self.links.append(href)
+
+    def handle_endtag(self, tag):
+        if tag in ("td", "th") and self.row is not None and self.in_cell:
+            self.row.append(" ".join("".join(self.cell).split()))
+            self.in_cell = False
+        elif tag == "tr" and self.row is not None:
+            self.rows.append((self.row, self.links))
+            self.row = None
+
+    def handle_data(self, data):
+        if self.in_cell:
+            self.cell.append(data)
+
+
+def parse_ed_releases(html_text, page_url):
+    p = _Rows()
+    p.feed(html_text)
+    items = []
+    for cells, links in p.rows:
+        date_cell = next((c for c in cells if ED_DATE.fullmatch(c.strip())), None)
+        if not date_cell:
+            continue
+        d, mon, y = ED_DATE.fullmatch(date_cell.strip()).groups()
+        month = MONTHS.get(mon.lower())
+        if not month:
+            continue
+        # sabse lamba cell = description
+        desc = max((c for c in cells if c != date_cell), key=len, default="")
+        if len(desc) < 25:
+            continue
+        title = desc if len(desc) <= 230 else desc[:227].rsplit(" ", 1)[0] + "…"
+        pdf = next((l for l in links if l.lower().split("?")[0].endswith(".pdf")), links[0] if links else None)
+        url = urllib.parse.urljoin(page_url, pdf) if pdf else page_url
+        # 12:00 IST = 06:30 UTC
+        when = dt.datetime(int(y), month, int(d), 6, 30, tzinfo=dt.timezone.utc)
+        items.append({
+            "title": title,
+            "url": url,
+            "source": "enforcementdirectorate.gov.in",
+            "lang": "en",
+            "official": True,
+            "published": when.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "category": categorize(title),
+        })
+    return items
+
+
+def fetch_ed_releases():
+    items = []
+    for url in ED_PAGES:
+        try:
+            raw = fetch(url).decode("utf-8", "replace")
+            got = parse_ed_releases(raw, url)
+            print(f"ED website: {len(got)} press releases ({url})")
+            items += got
+        except Exception as e:
+            print(f"[warn] ED website fail ({url}): {e}", file=sys.stderr)
+    return items
+
+
 def load_existing():
     try:
         with open(OUT, encoding="utf-8") as f:
@@ -107,6 +193,11 @@ def main():
         except Exception as e:
             print(f"[warn] feed fail ({lang}): {e}", file=sys.stderr)
 
+    ed = fetch_ed_releases()
+    if ed:
+        fresh += ed
+        ok += 1
+
     if ok == 0:
         print("Koi feed nahi mila, purani news.json waisi hi rahegi.")
         return 0
@@ -114,8 +205,6 @@ def main():
     cutoff = dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=KEEP_DAYS)
     merged, seen = [], set()
     for item in sorted(fresh + load_existing(), key=lambda x: x["published"], reverse=True):
-        if item.get("lang", "en") != "en":
-            continue  # site ab sirf English hai
         item["category"] = categorize(item["title"])
         key = norm(item["title"])
         if key in seen:
