@@ -19,21 +19,22 @@
 <meta name="twitter:description" content="The latest Enforcement Directorate news, in English & Hindi.">
 <meta name="twitter:image" content="https://edkhabar.in/og-image.png">
 <meta name="theme-color" content="#14213d">
+<script>try{var t=localStorage.getItem('edk_theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Mukta:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --navy:#14213d; --navy2:#1d2f57; --ink:#16203a; --paper:#f7f5f0; --card:#fff;
   --muted:#5f6878; --line:#e5e0d6; --accent:#d9480f; --accent-soft:#fff0e6; --peach:#ffb38a;
-  --serif:'Source Serif 4',Georgia,'Mukta',serif; --sans:'Inter','Mukta',system-ui,sans-serif;
+  --serif:'Source Serif 4',Georgia,'Noto Serif Devanagari',serif; --sans:'Inter',system-ui,-apple-system,'Segoe UI','Noto Sans Devanagari',sans-serif; --ink2:#333a48; --field:#fff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
-[lang=hi] h2,[lang=hi] .lead-title{font-family:'Mukta',var(--sans)}
+[lang=hi] h2,[lang=hi] .lead-title{font-family:var(--sans);font-weight:700}
 a{color:inherit}
 .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
 .hidden{display:none!important}
@@ -55,7 +56,7 @@ header{background:var(--navy);color:#fff}
 .ticker .track span{margin-right:48px}
 @keyframes scroll{to{transform:translateX(-100%)}}
 @media (prefers-reduced-motion:reduce){.ticker .track{animation:none;padding-left:12px}}
-.offline{background:#fff3cd;color:#664d03;text-align:center;font-size:.85rem;padding:6px}
+.offline{background:var(--card)3cd;color:#664d03;text-align:center;font-size:.85rem;padding:6px}
 
 /* ---------- nav ---------- */
 nav.tabs{display:flex;gap:2px;margin:16px 0 14px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
@@ -77,11 +78,11 @@ nav.tabs button.on{color:var(--ink);border-color:var(--accent)}
 
 /* ---------- controls ---------- */
 .controls{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
-.search{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff}
+.search{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--field);color:var(--ink)}
 .search:focus{outline:2px solid var(--navy2);outline-offset:1px}
 .chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px;font:inherit;font-size:.86rem;font-weight:500;cursor:pointer;white-space:nowrap;color:var(--ink)}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 13px;font:inherit;font-size:.86rem;font-weight:500;cursor:pointer;white-space:nowrap;color:var(--ink)}
 .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
 
 /* ---------- category colours ---------- */
@@ -110,10 +111,10 @@ nav.tabs button.on{color:var(--ink);border-color:var(--accent)}
 .card h2{font-family:var(--serif);font-size:1.1rem;line-height:1.35;font-weight:600;margin:8px 30px 10px 0}
 .card h2 a,.lead-title a{text-decoration:none}
 .card h2 a:hover,.lead-title a:hover{text-decoration:underline;text-decoration-color:var(--accent)}
-.foot{margin-top:auto;display:flex;align-items:center;gap:6px;border-top:1px solid #f0ece4;padding-top:9px}
+.foot{margin-top:auto;display:flex;align-items:center;gap:6px;border-top:1px solid var(--line);padding-top:9px}
 .src{font-size:.84rem;font-weight:600;color:var(--accent);text-decoration:none;margin-right:auto}
 .src:hover{text-decoration:underline}
-.sh{border:1px solid var(--line);background:#fff;border-radius:8px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;color:var(--muted);text-decoration:none}
+.sh{border:1px solid var(--line);background:var(--card);border-radius:8px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;color:var(--muted);text-decoration:none}
 .sh:hover{color:var(--ink);border-color:#cfc8ba}
 .sh svg{width:16px;height:16px}
 .save{position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.25rem;cursor:pointer;color:#b8860b;line-height:1}
@@ -121,7 +122,7 @@ nav.tabs button.on{color:var(--ink);border-color:var(--accent)}
 .daygrp{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px;display:flex;align-items:center;gap:10px}
 .daygrp::after{content:'';flex:1;height:1px;background:var(--line)}
 .empty{text-align:center;color:var(--muted);padding:40px 0}
-.more{display:block;margin:18px auto 0;font:inherit;font-weight:600;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 20px;cursor:pointer}
+.more{display:block;margin:18px auto 0;font:inherit;font-weight:600;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 20px;cursor:pointer}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:9px 16px;border-radius:10px;font-size:.88rem;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.show{opacity:1}
 
@@ -129,26 +130,70 @@ nav.tabs button.on{color:var(--ink);border-color:var(--accent)}
 .page{max-width:760px}
 .page h2{font-family:var(--serif);font-size:1.5rem;margin:6px 0 10px}
 .page h3{font-family:var(--serif);font-size:1.15rem;margin:20px 0 8px}
-.page p,.page li{color:#333a48}
+.page p,.page li{color:var(--ink2)}
 .page ul{padding-left:20px}
 .page p+p{margin-top:10px}
-details{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:0 16px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:0 16px}
 summary{cursor:pointer;font-weight:600;padding:14px 0;list-style:none}
 summary::after{content:'+';float:right;color:var(--accent);font-size:1.2rem}
 details[open] summary::after{content:'–'}
 details p,details ul{padding-bottom:14px}
 .gloss{display:grid;gap:10px}
-.gloss div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.gloss div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .gloss b{color:var(--accent)}
-.alert{background:#fff8e1;border:1px solid #f0d58a;border-radius:12px;padding:14px 16px;margin:4px 0 16px}
-.links a{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;text-decoration:none;font-weight:600}
+.alert{background:var(--card)8e1;border:1px solid #f0d58a;border-radius:12px;padding:14px 16px;margin:4px 0 16px}
+.links a{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;text-decoration:none;font-weight:600}
 .links a small{display:block;font-weight:400;color:var(--muted)}
-.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:12px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:12px}
 
 footer{margin-top:44px;background:var(--navy);color:#c9d1e3;padding:26px 0;font-size:.85rem}
 footer .row{display:flex;gap:12px;align-items:center;margin-bottom:10px}
 footer .row b{color:#fff;font-family:var(--serif);font-size:1.15rem}
 footer a{color:var(--peach)}
+
+/* ---------- dark mode ---------- */
+:root[data-theme=dark]{--paper:#0e1422;--card:#172036;--field:#121a2c;--ink:#e7eaf1;--ink2:#c3c9d6;--muted:#97a0b3;--line:#27324b;--accent:#f26a2e;--accent-soft:#3a2216;}
+  :root[data-theme=dark] .c-raids{background:rgba(248,113,113,.14);color:#fca5a5}
+  :root[data-theme=dark] .c-arrests{background:rgba(96,165,250,.14);color:#93c5fd}
+  :root[data-theme=dark] .c-summons{background:rgba(251,191,36,.14);color:#fcd34d}
+  :root[data-theme=dark] .c-attachments{background:rgba(74,222,128,.13);color:#86efac}
+  :root[data-theme=dark] .c-court{background:rgba(192,132,252,.15);color:#d8b4fe}
+  :root[data-theme=dark] .c-fema{background:rgba(56,189,248,.14);color:#7dd3fc}
+  :root[data-theme=dark] .c-other{background:rgba(148,163,184,.15);color:#cbd5e1}
+  :root[data-theme=dark] .badge{background:#26305a;color:#c7d2fe}
+  :root[data-theme=dark] .badge.off{background:#e7eaf1;color:#14213d}
+  :root[data-theme=dark] .alert{background:#2e2611;border-color:#5c4a17;color:#f5e3a8}
+  :root[data-theme=dark] .offline{background:#2e2611;color:#f5e3a8}
+  :root[data-theme=dark] .card:hover{box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  :root[data-theme=dark] .save{color:#f2c14e}
+  :root[data-theme=dark] .lead .band{background:#22305a}
+  :root[data-theme=dark] .chip.on{background:#e7eaf1;color:#14213d;border-color:#e7eaf1}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme=light]){--paper:#0e1422;--card:#172036;--field:#121a2c;--ink:#e7eaf1;--ink2:#c3c9d6;--muted:#97a0b3;--line:#27324b;--accent:#f26a2e;--accent-soft:#3a2216;}
+  :root:not([data-theme=light]) .c-raids{background:rgba(248,113,113,.14);color:#fca5a5}
+  :root:not([data-theme=light]) .c-arrests{background:rgba(96,165,250,.14);color:#93c5fd}
+  :root:not([data-theme=light]) .c-summons{background:rgba(251,191,36,.14);color:#fcd34d}
+  :root:not([data-theme=light]) .c-attachments{background:rgba(74,222,128,.13);color:#86efac}
+  :root:not([data-theme=light]) .c-court{background:rgba(192,132,252,.15);color:#d8b4fe}
+  :root:not([data-theme=light]) .c-fema{background:rgba(56,189,248,.14);color:#7dd3fc}
+  :root:not([data-theme=light]) .c-other{background:rgba(148,163,184,.15);color:#cbd5e1}
+  :root:not([data-theme=light]) .badge{background:#26305a;color:#c7d2fe}
+  :root:not([data-theme=light]) .badge.off{background:#e7eaf1;color:#14213d}
+  :root:not([data-theme=light]) .alert{background:#2e2611;border-color:#5c4a17;color:#f5e3a8}
+  :root:not([data-theme=light]) .offline{background:#2e2611;color:#f5e3a8}
+  :root:not([data-theme=light]) .card:hover{box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  :root:not([data-theme=light]) .save{color:#f2c14e}
+  :root:not([data-theme=light]) .lead .band{background:#22305a}
+  :root:not([data-theme=light]) .chip.on{background:#e7eaf1;color:#14213d;border-color:#e7eaf1}
+}
+.theme{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:10px;width:38px;height:38px;cursor:pointer;font-size:1.05rem;flex:none}
+.theme:hover{background:rgba(255,255,255,.16)}
+.upd+.theme{margin-left:12px}
+@media(max-width:640px){.upd+.theme{margin-left:auto}}
+/* ---------- state filter ---------- */
+.row2{display:flex;gap:8px}
+.row2 .search{flex:1;min-width:0}
+.state{flex:none;max-width:44%;padding:0 10px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:.9rem;background:var(--field);color:var(--ink);cursor:pointer}
 </style>
 </head>
 <body>
@@ -163,6 +208,7 @@ footer a{color:var(--peach)}
       <p>Every ED action, one place.</p>
     </div>
     <div class="upd" id="upd"></div>
+    <button class="theme" id="theme" aria-label="Switch dark / light mode" title="Dark / light mode">🌙</button>
   </div>
   <div class="ticker" aria-label="Latest headlines"><span class="lbl">LATEST</span><div class="track" id="ticker"></div></div>
 </header>
@@ -186,7 +232,10 @@ footer a{color:var(--peach)}
     </a>
     <div class="stats" id="stats"></div>
     <div class="controls">
-      <input class="search" id="q" type="search" placeholder="Search news: state, name, case… (e.g. Punjab, Kolkata)">
+      <div class="row2">
+        <input class="search" id="q" type="search" placeholder="Search: name, case, agency…">
+        <select class="state" id="state" aria-label="Filter by state"><option value="">All states</option></select>
+      </div>
       <div class="chips" id="langChips"></div>
       <div class="chips" id="chips"></div>
     </div>
@@ -286,6 +335,39 @@ const catOf = n => CAT_EN[n.category] || n.category || 'Other';
 const CATS = ['All','Raids','Arrests','Summons','Attachments','Court','FEMA','Other'];
 const LANGS = [['all','All sources'],['official','📢 ED statements'],['en','English'],['hi','हिंदी']];
 const PAGE = 30;
+const STATES = [
+ ['Andhra Pradesh','andhra|visakhapatnam|vizag|vijayawada|tirupati|guntur','आंध्र|विशाखापत्तनम'],
+ ['Assam','assam|guwahati|dibrugarh|silchar','असम|गुवाहाटी'],
+ ['Bihar','bihar|patna|gaya|muzaffarpur|bhagalpur','बिहार|पटना'],
+ ['Chandigarh','chandigarh','चंडीगढ़'],
+ ['Chhattisgarh','chhattisgarh|raipur|bilaspur|durg','छत्तीसगढ़|रायपुर'],
+ ['Delhi','delhi|new delhi','दिल्ली'],
+ ['Goa','goa|panaji','गोवा'],
+ ['Gujarat','gujarat|ahmedabad|surat|vadodara|rajkot|gandhinagar','गुजरात|अहमदाबाद|सूरत'],
+ ['Haryana','haryana|gurugram|gurgaon|faridabad|panchkula|sonipat|rohtak','हरियाणा|गुरुग्राम|फरीदाबाद'],
+ ['Himachal Pradesh','himachal|shimla|solan|dharamshala','हिमाचल|शिमला'],
+ ['Jammu & Kashmir','jammu|kashmir|srinagar','जम्मू|कश्मीर|श्रीनगर'],
+ ['Jharkhand','jharkhand|ranchi|dhanbad|jamshedpur','झारखंड|रांची'],
+ ['Karnataka','karnataka|bengaluru|bangalore|mysuru|mysore|mangaluru|hubballi','कर्नाटक|बेंगलुरु'],
+ ['Kerala','kerala|kochi|cochin|thiruvananthapuram|kozhikode|thrissur','केरल'],
+ ['Madhya Pradesh','madhya pradesh|bhopal|indore|gwalior|jabalpur','मध्य प्रदेश|भोपाल|इंदौर'],
+ ['Maharashtra','maharashtra|mumbai|pune|nagpur|thane|nashik|navi mumbai','महाराष्ट्र|मुंबई|पुणे|नागपुर'],
+ ['North-East','manipur|imphal|meghalaya|shillong|mizoram|aizawl|nagaland|kohima|tripura|agartala|sikkim|arunachal','मणिपुर|मेघालय|मिजोरम|नागालैंड|त्रिपुरा|सिक्किम|अरुणाचल'],
+ ['Odisha','odisha|orissa|bhubaneswar|cuttack','ओडिशा|भुवनेश्वर'],
+ ['Punjab','punjab|ludhiana|amritsar|jalandhar|mohali|moga|patiala|bathinda','पंजाब|लुधियाना|अमृतसर|जालंधर'],
+ ['Rajasthan','rajasthan|jaipur|jodhpur|udaipur|kota|ajmer','राजस्थान|जयपुर|जोधपुर'],
+ ['Tamil Nadu','tamil nadu|chennai|madurai|coimbatore|trichy','तमिलनाडु|चेन्नई'],
+ ['Telangana','telangana|hyderabad|warangal','तेलंगाना|हैदराबाद'],
+ ['Uttar Pradesh','uttar pradesh|lucknow|noida|ghaziabad|kanpur|varanasi|prayagraj|agra|meerut','उत्तर प्रदेश|लखनऊ|नोएडा|गाजियाबाद|कानपुर'],
+ ['Uttarakhand','uttarakhand|dehradun|haridwar','उत्तराखंड|देहरादून'],
+ ['West Bengal','west bengal|bengal|kolkata|howrah|siliguri|bidhannagar','बंगाल|कोलकाता'],
+].map(([name,en,hi]) => [name, new RegExp('\\b(?:'+en+')\\b','i'), new RegExp(hi)]);
+const stateCache = new Map();
+function statesOf(n){
+  if (!stateCache.has(n.url)) stateCache.set(n.url, STATES.filter(([,e,hi]) => e.test(n.title) || hi.test(n.title)).map(s => s[0]));
+  return stateCache.get(n.url);
+}
+let stateSel = '';
 let NEWS = [], cat = 'All', q = '', lang = 'all', shown = PAGE;
 let saved = [];
 try { saved = JSON.parse(localStorage.getItem('edk_saved') || '[]'); } catch(e) {}
@@ -354,6 +436,7 @@ function filtered(){
   const ql = q.toLowerCase();
   return NEWS.filter(n =>
     (cat==='All' || catOf(n)===cat) &&
+    (!stateSel || statesOf(n).includes(stateSel)) &&
     (lang==='all' || (lang==='official' ? (n.official || n.statement) : n.lang===lang)) &&
     (!ql || (n.title+' '+n.source).toLowerCase().includes(ql)));
 }
@@ -361,7 +444,7 @@ function render(){
   $('langChips').innerHTML = LANGS.map(([k,l]) => `<button class="chip${lang===k?' on':''}" data-lang="${k}">${l}</button>`).join('');
   $('chips').innerHTML = CATS.map(c => `<button class="chip${c===cat?' on':''}" data-cat="${c}">${c}</button>`).join('');
   const items = filtered();
-  const plain = cat==='All' && lang==='all' && !q;
+  const plain = cat==='All' && lang==='all' && !q && !stateSel;
   const lead = plain && items.length ? items[0] : null;
   $('lead').innerHTML = lead ? leadCard(lead) : '';
   const rest = (lead ? items.slice(1) : items).slice(0, shown);
@@ -398,6 +481,24 @@ document.addEventListener('click', async e => {
 });
 $('more').addEventListener('click', () => { shown += PAGE; render(); });
 $('q').addEventListener('input', e => { q = e.target.value.trim(); shown = PAGE; render(); });
+$('state').addEventListener('change', e => { stateSel = e.target.value; shown = PAGE; render(); });
+function fillStates(){
+  const counts = {};
+  NEWS.forEach(n => statesOf(n).forEach(s => counts[s] = (counts[s]||0)+1));
+  const names = Object.keys(counts).sort();
+  if (stateSel && !counts[stateSel]) { counts[stateSel] = 0; names.push(stateSel); names.sort(); }
+  $('state').innerHTML = '<option value="">All states</option>' + names.map(s => `<option value="${s}"${s===stateSel?' selected':''}>${s} (${counts[s]})</option>`).join('');
+}
+// ---- dark / light ----
+function curTheme(){ return document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); }
+function paintToggle(){ $('theme').textContent = curTheme()==='dark' ? '☀️' : '🌙'; }
+$('theme').addEventListener('click', () => {
+  const t = curTheme()==='dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = t; try { localStorage.setItem('edk_theme', t); } catch(e) {}
+  paintToggle();
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paintToggle);
+paintToggle();
 
 if (CONTACT_EMAIL){ $('contactLink').textContent = CONTACT_EMAIL; $('contactLink').href = 'mailto:'+CONTACT_EMAIL; }
 else $('contactBox').classList.add('hidden');
@@ -413,7 +514,7 @@ async function load(){
   }catch(e){
     $('list').innerHTML = '<div class="empty">Could not load news. Please refresh in a moment.</div>';
   }
-  stats(); render();
+  stats(); fillStates(); render();
 }
 load();
 setInterval(load, 15*60*1000);
