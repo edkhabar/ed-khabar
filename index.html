@@ -108,6 +108,7 @@ nav.tabs button.on{color:var(--ink);border-color:var(--accent)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px 12px;position:relative;display:flex;flex-direction:column;transition:box-shadow .15s,transform .15s}
 .card:hover{box-shadow:0 6px 18px rgba(20,33,61,.08);transform:translateY(-1px)}
 .meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;font-size:.78rem;color:var(--muted)}
+.card .meta,.lead .meta{padding-right:28px}
 .card h2{font-family:var(--serif);font-size:1.1rem;line-height:1.35;font-weight:600;margin:8px 30px 10px 0}
 .card h2 a,.lead-title a{text-decoration:none}
 .card h2 a:hover,.lead-title a:hover{text-decoration:underline;text-decoration-color:var(--accent)}
@@ -194,6 +195,56 @@ footer a{color:var(--peach)}
 .row2{display:flex;gap:8px}
 .row2 .search{flex:1;min-width:0}
 .state{flex:none;max-width:44%;padding:0 10px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:.9rem;background:var(--field);color:var(--ink);cursor:pointer}
+
+/* ---------- v4 additions ---------- */
+.src-ic{width:18px;height:18px;border-radius:4px;flex:none;object-fit:cover;background:var(--line)}
+.src-av{width:18px;height:18px;border-radius:4px;flex:none;display:inline-grid;place-items:center;font-size:.62rem;font-weight:700;color:#fff}
+.srcname{display:inline-flex;align-items:center;gap:6px}
+.new{background:#dc2626;color:#fff;font-weight:700;font-size:.66rem;letter-spacing:.06em;padding:2px 6px;border-radius:4px;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.6}}
+mark{background:#fde68a;color:inherit;border-radius:3px;padding:0 1px}
+.card,.lead{animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.card,.lead,.new{animation:none}}
+.skel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.skel i{display:block;height:12px;border-radius:6px;margin:10px 0;background:linear-gradient(90deg,var(--line) 25%,var(--paper) 50%,var(--line) 75%);background-size:200% 100%;animation:shim 1.2s infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.more-rep{margin:0 0 8px;font:inherit;font-size:.82rem;font-weight:600;color:var(--accent);background:var(--accent-soft);border:none;border-radius:8px;padding:6px 10px;cursor:pointer;align-self:flex-start}
+.rel{display:grid;gap:6px;margin:0 0 10px}
+.rel a{display:block;font-size:.88rem;text-decoration:none;border-left:3px solid var(--line);padding:2px 0 2px 10px}
+.rel a:hover{border-color:var(--accent)}
+.rel small{display:block;color:var(--muted);font-size:.76rem}
+.trend{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;align-items:center;margin-bottom:12px}
+.trend::-webkit-scrollbar{display:none}
+.trend b{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.trend button{border:none;background:var(--accent-soft);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:.84rem;font-weight:600;cursor:pointer;white-space:nowrap}
+.trend button span{color:var(--muted);font-weight:500;margin-left:4px}
+.digest-hd{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.digest-hd h2{font-family:var(--serif);font-size:1.45rem}
+.digest-hd p{color:var(--muted);font-size:.88rem}
+.btn{display:inline-flex;align-items:center;gap:6px;font:inherit;font-weight:600;font-size:.9rem;border-radius:10px;padding:9px 14px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none}
+.btn.pri{background:#25d366;border-color:#25d366;color:#fff}
+.dg{counter-reset:d;display:grid;gap:10px}
+.dg article{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px;animation:fadeUp .35s ease both}
+.dg article::before{counter-increment:d;content:counter(d);font-family:var(--serif);font-weight:700;font-size:1.5rem;color:var(--accent);min-width:26px}
+.dg h3{font-family:var(--serif);font-size:1.02rem;line-height:1.35;font-weight:600;margin:4px 0}
+.dg h3 a{text-decoration:none}
+.dg small{color:var(--muted);font-size:.78rem}
+.shared{background:var(--accent-soft);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.shared b{flex:1}
+.bnav{display:none}
+@media(max-width:640px){
+  nav.tabs{display:none}
+  body{padding-bottom:64px}
+  .bnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  .bnav button{background:none;border:none;font:inherit;font-size:.68rem;font-weight:600;color:var(--muted);display:grid;justify-items:center;gap:2px;padding:4px 0;cursor:pointer}
+  .bnav button span{font-size:1.15rem;line-height:1}
+  .bnav button.on{color:var(--accent)}
+  main{padding-top:8px}
+  .toast{bottom:80px}
+}
+:root[data-theme=dark] mark{background:#854d0e;color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) mark{background:#854d0e;color:#fff}}
 </style>
 </head>
 <body>
@@ -217,9 +268,9 @@ footer a{color:var(--peach)}
 <main class="wrap">
   <nav class="tabs" role="tablist">
     <button class="on" data-view="news">News</button>
+    <button data-view="digest">Today's digest</button>
     <button data-view="saved">Saved</button>
     <button data-view="learn">About ED</button>
-    <button data-view="links">Useful links</button>
     <button data-view="about">About us</button>
   </nav>
 
@@ -231,6 +282,7 @@ footer a{color:var(--peach)}
       <span class="arr">→</span>
     </a>
     <div class="stats" id="stats"></div>
+    <div class="trend hidden" id="trend"></div>
     <div class="controls">
       <div class="row2">
         <input class="search" id="q" type="search" placeholder="Search: name, case, agency…">
@@ -240,11 +292,35 @@ footer a{color:var(--peach)}
       <div class="chips" id="chips"></div>
     </div>
     <div id="lead"></div>
-    <div id="list"><div class="empty">Loading news…</div></div>
+    <div id="list">
+      <div class="skel"><i style="width:30%"></i><i></i><i style="width:80%"></i></div>
+      <div class="skel"><i style="width:25%"></i><i></i><i style="width:70%"></i></div>
+      <div class="skel"><i style="width:35%"></i><i></i><i style="width:60%"></i></div>
+    </div>
     <button class="more hidden" id="more">Show more stories</button>
   </section>
 
+  <!-- DIGEST -->
+  <section id="view-digest" class="hidden page" style="max-width:820px">
+    <div class="digest-hd">
+      <div><h2>Today's top ED stories</h2><p id="dgDate"></p></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn pri" id="dgWa" href="#" target="_blank" rel="noopener">Share on WhatsApp</a>
+        <button class="btn" id="dgCopy">Copy text</button>
+      </div>
+    </div>
+    <div class="dg" id="dgList"></div>
+    <p style="color:var(--muted);font-size:.82rem;margin-top:12px">Ranked by how many outlets reported each story. Updated automatically.</p>
+  </section>
+
+  <!-- SAVED -->
   <section id="view-saved" class="hidden">
+    <div class="shared hidden" id="sharedBox"><b id="sharedTitle"></b><button class="btn" id="saveAllShared">Save all to my list</button></div>
+    <div class="grid" id="sharedList" style="margin-bottom:18px"></div>
+    <div class="digest-hd" id="savedHd">
+      <div><h2 style="font-size:1.25rem">My saved stories</h2><p>Saved on this device only.</p></div>
+      <button class="btn" id="shareSaved">Share my list</button>
+    </div>
     <div class="grid" id="savedList"></div>
   </section>
 
@@ -283,26 +359,15 @@ footer a{color:var(--peach)}
     <p style="margin-top:14px;color:var(--muted);font-size:.9rem">Remember: a raid, summons or arrest does not mean guilt is proven. Charges are decided in court.</p>
   </section>
 
-  <!-- LINKS -->
-  <section id="view-links" class="hidden page">
-    <div class="alert">⚠️ <b>Beware of fake ED summons!</b> Fraudsters pose as ED officers to demand money. If you receive a summons, check it on the ED's official website.</div>
-    <div class="links">
-      <a href="https://www.enforcementdirectorate.gov.in/" target="_blank" rel="noopener">ED official website<small>enforcementdirectorate.gov.in</small></a>
-      <a href="https://www.enforcementdirectorate.gov.in/media/press-release/" target="_blank" rel="noopener">ED press releases<small>Most reliable, straight from the source</small></a>
-      <a href="https://www.enforcementdirectorate.gov.in/media/press-release-archive/" target="_blank" rel="noopener">ED press release archive<small>Older press releases</small></a>
-      <a href="https://www.enforcementdirectorate.gov.in/media/ed-in-the-news/" target="_blank" rel="noopener">ED in the News<small>News coverage listed by the ED</small></a>
-    </div>
-  </section>
-
-  <!-- ABOUT US -->
+  <!-- ABOUT US + LINKS -->
   <section id="view-about" class="hidden page">
     <h2>About ED Khabar</h2>
     <p>ED Khabar brings together news about the Directorate of Enforcement (ED) in one place: reporting from news outlets in English and Hindi on raids, arrests, summons, property attachments and court proceedings, with a direct link to the ED's official press releases.</p>
     <h3>How it works</h3>
     <ul>
       <li>For official information, the "Official ED press releases" button opens the ED's own press release page.</li>
-      <li>News headlines are collected automatically from Google News every two hours. Every story opens at its original publisher.</li>
-      <li>Labels such as "Raids" or "ED statement" are added automatically from the headline and may occasionally be wrong.</li>
+      <li>News headlines are collected automatically from Google News every two hours. Every story links to its original publisher.</li>
+      <li>Labels such as "Raids" or "ED statement", states and story groups are added automatically from the headline and may occasionally be wrong.</li>
     </ul>
     <h3>Independence</h3>
     <p>ED Khabar is an independent website. It is <b>not</b> run by, affiliated with or endorsed by the Directorate of Enforcement or the Government of India. For official information, always refer to the ED's own website.</p>
@@ -310,6 +375,14 @@ footer a{color:var(--peach)}
     <div class="box" id="contactBox">
       <h3 style="margin-top:0">Contact</h3>
       <p>Found a mistake or want a story corrected? Email <a id="contactLink" href="#"></a></p>
+    </div>
+    <h3>Useful links</h3>
+    <div class="alert">⚠️ <b>Beware of fake ED summons!</b> Fraudsters pose as ED officers to demand money. If you receive a summons, check it on the ED's official website.</div>
+    <div class="links">
+      <a href="https://www.enforcementdirectorate.gov.in/" target="_blank" rel="noopener">ED official website<small>enforcementdirectorate.gov.in</small></a>
+      <a href="https://www.enforcementdirectorate.gov.in/media/press-release/" target="_blank" rel="noopener">ED press releases<small>Most reliable, straight from the source</small></a>
+      <a href="https://www.enforcementdirectorate.gov.in/media/press-release-archive/" target="_blank" rel="noopener">ED press release archive<small>Older press releases</small></a>
+      <a href="https://www.enforcementdirectorate.gov.in/media/ed-in-the-news/" target="_blank" rel="noopener">ED in the News<small>News coverage listed by the ED</small></a>
     </div>
   </section>
 </main>
@@ -321,9 +394,17 @@ footer a{color:var(--peach)}
       <b>ED Khabar</b>
     </div>
     <p>An independent news aggregator. Not affiliated with the Directorate of Enforcement or the Government of India. Headlines link to their original publishers.</p>
-    <p style="margin-top:8px">Last updated: <span id="lastup">—</span> · <a href="#" data-goto="about">About us</a></p>
+    <p style="margin-top:8px">Last updated: <span id="lastup">—</span> · <a href="#about" data-goto="about">About us</a></p>
   </div>
 </footer>
+
+<nav class="bnav" aria-label="Sections">
+  <button class="on" data-view="news"><span>📰</span>News</button>
+  <button data-view="digest"><span>🗞</span>Digest</button>
+  <button data-view="saved"><span>🔖</span>Saved</button>
+  <button data-view="learn"><span>📘</span>About ED</button>
+  <button data-view="about"><span>ℹ️</span>More</button>
+</nav>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -334,6 +415,7 @@ const CAT_EN = {'छापेमारी':'Raids','गिरफ़्तार�
 const catOf = n => CAT_EN[n.category] || n.category || 'Other';
 const CATS = ['All','Raids','Arrests','Summons','Attachments','Court','FEMA','Other'];
 const LANGS = [['all','All sources'],['official','📢 ED statements'],['en','English'],['hi','हिंदी']];
+const VIEWS = ['news','digest','saved','learn','about'];
 const PAGE = 30;
 const STATES = [
  ['Andhra Pradesh','andhra|visakhapatnam|vizag|vijayawada|tirupati|guntur','आंध्र|विशाखापत्तनम'],
@@ -362,18 +444,20 @@ const STATES = [
  ['Uttarakhand','uttarakhand|dehradun|haridwar','उत्तराखंड|देहरादून'],
  ['West Bengal','west bengal|bengal|kolkata|howrah|siliguri|bidhannagar','बंगाल|कोलकाता'],
 ].map(([name,en,hi]) => [name, new RegExp('\\b(?:'+en+')\\b','i'), new RegExp(hi)]);
-const stateCache = new Map();
-function statesOf(n){
-  if (!stateCache.has(n.url)) stateCache.set(n.url, STATES.filter(([,e,hi]) => e.test(n.title) || hi.test(n.title)).map(s => s[0]));
-  return stateCache.get(n.url);
-}
-let stateSel = '';
-let NEWS = [], cat = 'All', q = '', lang = 'all', shown = PAGE;
+const PLACE_WORDS = new Set(STATES.flatMap(s => s[1].source.replace(/\\b|\(\?:|\)/g,'').split('|')).flatMap(w => w.split(' ')));
+const TREND_STOP = new Set(('ed enforcement directorate the a an in on of for to and with from by after over amid as at its his her pmla fema rs cr crore lakh ' +
+  'court high supreme special case probe raids raid arrests arrest summons searches money laundering bank fraud scam india indian news ' +
+  'chief minister former ex mla mp says said statement agency government state police cbi it tax department ltd pvt limited group company ' +
+  'monday tuesday wednesday thursday friday saturday sunday january february march april may june july august september october november december').split(' '));
+
+let NEWS = [], BYID = new Map(), cat = 'All', q = '', lang = 'all', shown = PAGE, stateSel = '';
+const open = new Set();
 let saved = [];
 try { saved = JSON.parse(localStorage.getItem('edk_saved') || '[]'); } catch(e) {}
 function persist(){ try{ localStorage.setItem('edk_saved', JSON.stringify(saved)); }catch(e){} }
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const fmt = d => new Date(d).toLocaleString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kolkata'});
 function ago(d){ const m=(Date.now()-new Date(d))/60000;
   if(m<60) return Math.max(1,Math.round(m))+' min ago';
@@ -385,40 +469,72 @@ function dayLabel(d){
   if (k===today) return 'Today'; if (k===yest) return 'Yesterday';
   return new Date(d).toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short',timeZone:'Asia/Kolkata'});
 }
+function fnv(s){ let h=0x811c9dc5; for (let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,0x01000193)>>>0; } return h.toString(16).padStart(8,'0'); }
+const idOf = n => n.id || (n.id = fnv(n.url));
+const pageOf = n => n.group !== undefined ? `story/${idOf(n)}.html` : n.url;   // story page exists once the script has run
+const stateCache = new Map();
+function statesOf(n){
+  if (!stateCache.has(n.url)) stateCache.set(n.url, STATES.filter(([,e,hi]) => e.test(n.title) || hi.test(n.title)).map(s => s[0]));
+  return stateCache.get(n.url);
+}
+function hl(text){
+  const t = esc(text);
+  if (!q) return t;
+  return t.replace(new RegExp('('+reEsc(esc(q))+')','gi'), '<mark>$1</mark>');
+}
+const AV_COL = ['#b42318','#1d4ed8','#92400e','#166534','#7e22ce','#0369a1','#9a3412','#334155'];
+function srcIcon(n){
+  const ch = (n.source||'').trim().charAt(0).toUpperCase(); const letter = /[A-Z0-9]/.test(ch) ? ch : '•';
+  const col = AV_COL[parseInt(fnv(n.source||'x').slice(0,2),16) % AV_COL.length];
+  const av = `<span class="src-av" style="background:${col}">${letter}</span>`;
+  if (n.official) return '<span class="src-av" style="background:#14213d">🏛</span>';
+  if (!n.site) return av;
+  return `<img class="src-ic" loading="lazy" alt="" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(n.site)}&sz=64" onerror="this.outerHTML='${av.replace(/"/g,'&quot;').replace(/'/g,"\\'")}'">`;
+}
 const ICON = {
   wa:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3z"/></svg>',
   x:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 3h3.1l-6.8 7.7 8 10.3h-6.2l-4.9-6.3L5.4 21H2.3l7.2-8.3L1.8 3h6.4l4.4 5.8zm-1.1 16.2h1.7L7.4 4.7H5.6z"/></svg>',
   link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>'
 };
+function shareUrl(n){ return n.group !== undefined ? location.origin + location.pathname.replace(/[^/]*$/,'') + `story/${idOf(n)}.html` : n.url; }
 function shareBits(n){
-  const text = n.title + ' — via ED Khabar (edkhabar.in)';
-  return `<a class="sh" href="https://wa.me/?text=${encodeURIComponent(text+'\n'+n.url)}" target="_blank" rel="noopener" title="Share on WhatsApp" aria-label="Share on WhatsApp">${ICON.wa}</a>
-    <a class="sh" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(n.url)}" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X">${ICON.x}</a>
-    <button class="sh" data-copy="${esc(n.url)}" title="Copy link" aria-label="Copy link">${ICON.link}</button>`;
+  const u = shareUrl(n), text = n.title + ' — via ED Khabar';
+  return `<a class="sh" href="https://wa.me/?text=${encodeURIComponent(text+'\n'+u)}" target="_blank" rel="noopener" title="Share on WhatsApp" aria-label="Share on WhatsApp">${ICON.wa}</a>
+    <a class="sh" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(u)}" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X">${ICON.x}</a>
+    <button class="sh" data-copy="${esc(u)}" title="Copy link" aria-label="Copy link">${ICON.link}</button>`;
 }
 function metaBits(n){
-  const c = catOf(n);
-  return `<span class="tag c-${c.toLowerCase()}">${esc(c)}</span>`
+  const c = catOf(n), isNew = Date.now()-new Date(n.published) < 36e5;
+  return (isNew ? '<span class="new">NEW</span>' : '')
+    + `<span class="tag c-${c.toLowerCase()}">${esc(c)}</span>`
     + (n.official ? '<span class="badge off">🏛 ED Official</span>' : n.statement ? '<span class="badge">📢 ED statement</span>' : '')
-    + `<span>${esc(n.source)}</span>${n.lang==='hi'?'<span>· हिंदी</span>':''}<span title="${fmt(n.published)} IST">· ${ago(n.published)}</span>`;
+    + `<span class="srcname">${srcIcon(n)}${esc(n.source)}</span>${n.lang==='hi'?'<span>· हिंदी</span>':''}<span title="${fmt(n.published)} IST">· ${ago(n.published)}</span>`;
 }
-function card(n){
+function relBits(n, others){
+  if (!others.length) return '';
+  const isOpen = open.has(idOf(n));
+  return `<button class="more-rep" data-toggle="${idOf(n)}">📰 ${others.length} more report${others.length>1?'s':''} on this story ${isOpen?'▴':'▾'}</button>`
+    + (isOpen ? `<div class="rel">${others.map(o => `<a href="${esc(pageOf(o))}">${hl(o.title)}<small>${esc(o.source)} · ${ago(o.published)}</small></a>`).join('')}</div>` : '');
+}
+function card(n, others=[]){
   const on = saved.includes(n.url);
   return `<article class="card" lang="${n.lang==='hi'?'hi':'en'}">
     <button class="save" data-url="${esc(n.url)}" aria-label="${on?'Remove from saved':'Save story'}">${on?'★':'☆'}</button>
     <div class="meta">${metaBits(n)}</div>
-    <h2><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a></h2>
+    <h2><a href="${esc(pageOf(n))}">${hl(n.title)}</a></h2>
+    ${relBits(n, others)}
     <div class="foot"><a class="src" href="${esc(n.url)}" target="_blank" rel="noopener">${n.official?'Read press release →':'Read full story →'}</a>${shareBits(n)}</div>
   </article>`;
 }
-function leadCard(n){
+function leadCard(n, others=[]){
   const on = saved.includes(n.url);
   return `<article class="lead" lang="${n.lang==='hi'?'hi':'en'}">
     <div class="band">TOP STORY</div>
     <div class="body">
       <button class="save" data-url="${esc(n.url)}" aria-label="Save story">${on?'★':'☆'}</button>
       <div class="meta">${metaBits(n)}</div>
-      <div class="lead-title"><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a></div>
+      <div class="lead-title"><a href="${esc(pageOf(n))}">${hl(n.title)}</a></div>
+      ${relBits(n, others)}
       <div class="foot"><a class="src" href="${esc(n.url)}" target="_blank" rel="noopener">${n.official?'Read press release →':'Read full story →'}</a>${shareBits(n)}</div>
     </div>
   </article>`;
@@ -426,11 +542,37 @@ function leadCard(n){
 function stats(){
   const day = NEWS.filter(n => Date.now()-new Date(n.published) < 864e5).length;
   const off = NEWS.filter(n => (n.official || n.statement) && Date.now()-new Date(n.published) < 7*864e5).length;
-  const week = NEWS.filter(n => Date.now()-new Date(n.published) < 7*864e5).length;
+  const week = new Set(NEWS.filter(n => Date.now()-new Date(n.published) < 7*864e5).map(n => n.group || idOf(n))).size;
   $('stats').innerHTML = `
     <div class="stat"><b>${day}</b><span>Stories, last 24 hrs</span></div>
-    <div class="stat"><b>${week}</b><span>Stories this week</span></div>
+    <div class="stat"><b>${week}</b><span>Cases this week</span></div>
     <div class="stat"><b>${off}</b><span>ED statements this week</span></div>`;
+}
+// ---- trending names: capitalised phrases mentioned in several different stories this week ----
+function trending(){
+  const counts = new Map();
+  const recent = NEWS.filter(n => n.lang !== 'hi' && Date.now()-new Date(n.published) < 7*864e5);
+  for (const n of recent){
+    const found = new Set();
+    const words = n.title.replace(/[‘’'"“”:,;()|]/g,' ').split(/\s+/).filter(Boolean);
+    let run = [];
+    const flush = () => {
+      while (run.length && TREND_STOP.has(run[0].toLowerCase())) run.shift();
+      while (run.length && TREND_STOP.has(run[run.length-1].toLowerCase())) run.pop();
+      if (run.length >= 2 && run.length <= 4){ const p = run.join(' '); if (!PLACE_WORDS.has(p.toLowerCase())) found.add(p); }
+      else if (run.length === 1 && /^[A-Z][A-Z-]{2,7}$/.test(run[0]) && !TREND_STOP.has(run[0].toLowerCase())) found.add(run[0]);
+      run = [];
+    };
+    for (const w of words){
+      if (/^[A-Z][\w.&-]*$/.test(w) && !PLACE_WORDS.has(w.toLowerCase())) run.push(w.replace(/[.]+$/,'')); else flush();
+    }
+    flush();
+    const grp = n.group || idOf(n);
+    for (const p of found){ if (!counts.has(p)) counts.set(p, new Set()); counts.get(p).add(grp); }
+  }
+  const top = [...counts].map(([p,s]) => [p,s.size]).filter(([,c]) => c >= 2).sort((a,b) => b[1]-a[1]).slice(0,8);
+  $('trend').classList.toggle('hidden', !top.length);
+  $('trend').innerHTML = top.length ? '<b>🔥 Trending</b>' + top.map(([p,c]) => `<button data-trend="${esc(p)}">${esc(p)}<span>${c}</span></button>`).join('') : '';
 }
 function filtered(){
   const ql = q.toLowerCase();
@@ -440,48 +582,112 @@ function filtered(){
     (lang==='all' || (lang==='official' ? (n.official || n.statement) : n.lang===lang)) &&
     (!ql || (n.title+' '+n.source).toLowerCase().includes(ql)));
 }
+// keep one card per story group; the others go into "more reports"
+function grouped(items){
+  const heads = [], byGroup = new Map();
+  for (const n of items){
+    const g = n.group || idOf(n);
+    if (!byGroup.has(g)){ byGroup.set(g, []); heads.push(n); }
+    else byGroup.get(g).push(n);
+  }
+  return heads.map(h => [h, byGroup.get(h.group || idOf(h))]);
+}
 function render(){
   $('langChips').innerHTML = LANGS.map(([k,l]) => `<button class="chip${lang===k?' on':''}" data-lang="${k}">${l}</button>`).join('');
   $('chips').innerHTML = CATS.map(c => `<button class="chip${c===cat?' on':''}" data-cat="${c}">${c}</button>`).join('');
-  const items = filtered();
+  const groups = grouped(filtered());
   const plain = cat==='All' && lang==='all' && !q && !stateSel;
-  const lead = plain && items.length ? items[0] : null;
-  $('lead').innerHTML = lead ? leadCard(lead) : '';
-  const rest = (lead ? items.slice(1) : items).slice(0, shown);
-  if (!items.length){ $('list').innerHTML = '<div class="empty">No stories found. Try another search or filter.</div>'; }
+  const lead = plain && groups.length ? groups[0] : null;
+  $('lead').innerHTML = lead ? leadCard(lead[0], lead[1]) : '';
+  const rest = (lead ? groups.slice(1) : groups).slice(0, shown);
+  if (!groups.length){ $('list').innerHTML = '<div class="empty">No stories found. Try another search or filter.</div>'; }
   else {
-    let html = '', cur = null, open = false;
-    for (const n of rest){
+    let html = '', cur = null, isOpen = false;
+    for (const [n, others] of rest){
       const lbl = dayLabel(n.published);
-      if (lbl !== cur){ if (open) html += '</div>'; html += `<div class="daygrp">${lbl}</div><div class="grid">`; cur = lbl; open = true; }
-      html += card(n);
+      if (lbl !== cur){ if (isOpen) html += '</div>'; html += `<div class="daygrp">${lbl}</div><div class="grid">`; cur = lbl; isOpen = true; }
+      html += card(n, others);
     }
-    if (open) html += '</div>';
+    if (isOpen) html += '</div>';
     $('list').innerHTML = html;
   }
-  $('more').classList.toggle('hidden', (lead ? items.length-1 : items.length) <= shown);
+  $('more').classList.toggle('hidden', (lead ? groups.length-1 : groups.length) <= shown);
+  renderSaved();
+}
+// ---- saved + shared list ----
+let sharedIds = [];
+try { sharedIds = (new URLSearchParams(location.search).get('s') || '').split(',').filter(x => /^[0-9a-f]{8}$/.test(x)).slice(0,50); } catch(e) {}
+function renderSaved(){
   const s = NEWS.filter(n => saved.includes(n.url));
-  $('savedList').innerHTML = s.length ? s.map(card).join('') : '<div class="empty">No saved stories yet. Tap ☆ on any story to save it.</div>';
+  $('savedList').innerHTML = s.length ? s.map(n => card(n)).join('') : '<div class="empty">No saved stories yet. Tap ☆ on any story to save it.</div>';
+  $('shareSaved').classList.toggle('hidden', !s.length);
+  if (sharedIds.length && NEWS.length){
+    const sh = sharedIds.map(id => BYID.get(id)).filter(Boolean);
+    $('sharedBox').classList.remove('hidden');
+    $('sharedTitle').textContent = sh.length ? `Someone shared ${sh.length} stor${sh.length>1?'ies':'y'} with you` : 'The shared stories are no longer available (older than 45 days).';
+    $('saveAllShared').classList.toggle('hidden', !sh.length);
+    $('sharedList').innerHTML = sh.map(n => card(n)).join('');
+  }
 }
-function toast(t){ const el=$('toast'); el.textContent=t; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),1600); }
-function show(view){
-  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('on', b.dataset.view===view));
-  ['news','saved','learn','links','about'].forEach(v => $('view-'+v).classList.toggle('hidden', v!==view));
+// ---- daily digest ----
+function digestItems(){
+  const today = istDay(Date.now());
+  let pool = NEWS.filter(n => istDay(n.published) === today);
+  if (grouped(pool).length < 5) pool = NEWS.filter(n => Date.now()-new Date(n.published) < 864e5);
+  if (grouped(pool).length < 5) pool = NEWS.filter(n => Date.now()-new Date(n.published) < 2*864e5);
+  const score = ([h, o]) => (o.length+1)*10 + (h.official||h.statement ? 5 : 0) + (h.lang==='en' ? 1 : 0);
+  return grouped(pool).sort((a,b) => score(b)-score(a) || b[0].published.localeCompare(a[0].published)).slice(0,10);
 }
+function renderDigest(){
+  const items = digestItems();
+  const dateTxt = new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kolkata'});
+  $('dgDate').textContent = dateTxt;
+  $('dgList').innerHTML = items.length ? items.map(([n,o]) => `<article lang="${n.lang==='hi'?'hi':'en'}"><div>
+      <div class="meta"><span class="tag c-${catOf(n).toLowerCase()}">${esc(catOf(n))}</span><span class="srcname">${srcIcon(n)}${esc(n.source)}</span></div>
+      <h3><a href="${esc(pageOf(n))}">${esc(n.title)}</a></h3>
+      <small>${o.length ? `Reported by ${o.length+1} outlets · ` : ''}${ago(n.published)}</small></div></article>`).join('')
+    : '<div class="empty">No stories yet today.</div>';
+  const base = location.origin + location.pathname.replace(/[^/]*$/,'');
+  const text = `🗞 *ED Khabar — Top ED news*\n${dateTxt}\n\n` + items.map(([n],i) => `${i+1}. ${n.title}`).join('\n') + `\n\nRead all: ${base}#digest`;
+  $('dgWa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
+  $('dgCopy').dataset.text = text;
+}
+function toast(t){ const el=$('toast'); el.textContent=t; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),1700); }
+function show(view, push=true){
+  if (!VIEWS.includes(view)) view = 'news';
+  document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('on', b.dataset.view===view));
+  VIEWS.forEach(v => $('view-'+v).classList.toggle('hidden', v!==view));
+  if (view==='digest') renderDigest();
+  if (push) history.replaceState(null, '', view==='news' ? location.pathname + location.search : '#'+view);
+  scrollTo({top:0});
+}
+async function copy(text, okMsg){ try { await navigator.clipboard.writeText(text); toast(okMsg); } catch(err){ toast('Could not copy'); } }
 document.addEventListener('click', async e => {
   const c = e.target.closest('[data-cat]'); if (c){ cat = c.dataset.cat; shown = PAGE; render(); return; }
   const l = e.target.closest('[data-lang]'); if (l){ lang = l.dataset.lang; shown = PAGE; render(); return; }
+  const tr = e.target.closest('[data-trend]'); if (tr){ q = tr.dataset.trend; $('q').value = q; shown = PAGE; render(); $('q').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  const tg = e.target.closest('[data-toggle]'); if (tg){ const id = tg.dataset.toggle; open.has(id) ? open.delete(id) : open.add(id); render(); return; }
   const s = e.target.closest('.save');
   if (s){ const u = s.dataset.url; const had = saved.includes(u);
     saved = had ? saved.filter(x=>x!==u) : [...saved, u]; persist(); render(); toast(had?'Removed from saved':'Saved'); return; }
-  const cp = e.target.closest('[data-copy]');
-  if (cp){ try { await navigator.clipboard.writeText(cp.dataset.copy); toast('Link copied'); } catch(err){ toast('Could not copy'); } return; }
+  const cp = e.target.closest('[data-copy]'); if (cp){ copy(cp.dataset.copy, 'Link copied'); return; }
   const t = e.target.closest('[data-view]'); if (t){ show(t.dataset.view); return; }
-  const g = e.target.closest('[data-goto]'); if (g){ e.preventDefault(); show(g.dataset.goto); scrollTo({top:0,behavior:'smooth'}); }
+  const g = e.target.closest('[data-goto]'); if (g){ e.preventDefault(); show(g.dataset.goto); }
 });
 $('more').addEventListener('click', () => { shown += PAGE; render(); });
 $('q').addEventListener('input', e => { q = e.target.value.trim(); shown = PAGE; render(); });
 $('state').addEventListener('change', e => { stateSel = e.target.value; shown = PAGE; render(); });
+$('dgCopy').addEventListener('click', () => copy($('dgCopy').dataset.text || '', 'Digest copied'));
+$('shareSaved').addEventListener('click', async () => {
+  const ids = NEWS.filter(n => saved.includes(n.url)).map(idOf).slice(0,50);
+  const url = location.origin + location.pathname + '?s=' + ids.join(',') + '#saved';
+  if (navigator.share){ try { await navigator.share({title:'My ED Khabar list', url}); return; } catch(err){ if (err.name==='AbortError') return; } }
+  copy(url, 'Link to your list copied');
+});
+$('saveAllShared').addEventListener('click', () => {
+  sharedIds.map(id => BYID.get(id)).filter(Boolean).forEach(n => { if (!saved.includes(n.url)) saved.push(n.url); });
+  persist(); render(); toast('Added to your saved list');
+});
 function fillStates(){
   const counts = {};
   NEWS.forEach(n => statesOf(n).forEach(s => counts[s] = (counts[s]||0)+1));
@@ -499,7 +705,6 @@ $('theme').addEventListener('click', () => {
 });
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paintToggle);
 paintToggle();
-
 if (CONTACT_EMAIL){ $('contactLink').textContent = CONTACT_EMAIL; $('contactLink').href = 'mailto:'+CONTACT_EMAIL; }
 else $('contactBox').classList.add('hidden');
 
@@ -508,16 +713,21 @@ async function load(){
     const r = await fetch('news.json?t=' + Date.now(), {cache:'no-store'});
     const d = await r.json();
     NEWS = d.items.sort((a,b) => b.published.localeCompare(a.published));
+    BYID = new Map(NEWS.map(n => [idOf(n), n]));
     $('upd').innerHTML = `<b>Updated ${fmt(d.updated)} IST</b>Refreshes automatically`;
     $('lastup').textContent = fmt(d.updated) + ' IST';
     $('ticker').innerHTML = NEWS.slice(0,6).map(n => `<span>● ${esc(n.title)}</span>`).join('');
   }catch(e){
     $('list').innerHTML = '<div class="empty">Could not load news. Please refresh in a moment.</div>';
   }
-  stats(); fillStates(); render();
+  stats(); trending(); fillStates(); render();
+  if (!$('view-digest').classList.contains('hidden')) renderDigest();
 }
+const startView = (location.hash || '').slice(1) || (sharedIds.length ? 'saved' : 'news');
+show(startView, false);
 load();
 setInterval(load, 15*60*1000);
+addEventListener('hashchange', () => show((location.hash||'').slice(1) || 'news', false));
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
