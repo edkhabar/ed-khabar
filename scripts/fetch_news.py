@@ -227,6 +227,7 @@ def story_page(it, related):
 <meta name="twitter:card" content="summary_large_image">
 <meta property="article:published_time" content="{it["published"]}">
 <link rel="icon" href="../icons/icon-192.png" type="image/png">
+<script data-goatcounter="https://edkhabar.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <style>{STORY_CSS}</style>
 </head>
 <body>
