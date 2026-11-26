@@ -99,75 +99,6 @@ def parse_rss(xml_bytes, lang):
     return items
 
 
-# ---------- ED ki official press releases (ED ki email se mili ijazat ke saath) ----------
-ED_API = "https://www.enforcementdirectorate.gov.in/umbraco/backoffice/api/PressReleaseApi/GetPublic?language=en"
-ED_SITE = "https://www.enforcementdirectorate.gov.in"
-ED_EVERY_HOURS = 6       # ED ke server par bojh na pade: 6 ghante mein sirf ek baar
-ED_MAX = 40              # sirf sabse nayi itni releases
-ED_HEADERS = {
-    "User-Agent": "ED-Khabar/1.0 (+https://edkhabar.in; independent news aggregator, fetching with ED's permission)",
-    "Accept": "application/json",
-}
-IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
-
-
-def _ed_when(rec):
-    """CreatedDate ('2026-11-25 17:15:27', IST) ho to woh, warna ReleaseDate ka 12 baje IST."""
-    for key, fmt in (("CreatedDate", "%Y-%m-%d %H:%M:%S"), ("ReleaseDate", "%Y-%m-%dT%H:%M:%S")):
-        val = (rec.get(key) or "").split(".")[0]
-        try:
-            t = dt.datetime.strptime(val, fmt)
-        except ValueError:
-            continue
-        if key == "ReleaseDate":
-            t = t.replace(hour=12)
-        return t.replace(tzinfo=IST).astimezone(dt.timezone.utc)
-    return None
-
-
-def parse_ed_api(records):
-    items = []
-    recs = [r for r in records if isinstance(r, dict) and (r.get("Language") or "en") == "en"]
-    recs.sort(key=lambda r: (r.get("ReleaseDate") or "", r.get("Id") or 0), reverse=True)
-    for r in recs[:ED_MAX]:
-        desc = " ".join((r.get("Description") or "").split())
-        when = _ed_when(r)
-        if len(desc) < 20 or not when:
-            continue
-        title = desc if len(desc) <= 230 else desc[:227].rsplit(" ", 1)[0] + "…"
-        pdf = r.get("PdfUrl") or ""
-        url = urllib.parse.urljoin(ED_SITE + "/", urllib.parse.quote(pdf, safe="/:%?=&")) if pdf \
-            else ED_SITE + "/media/press-release/"
-        items.append({
-            "title": title, "url": url, "source": "ED press release",
-            "lang": "en", "official": True,
-            "published": when.strftime("%Y-%m-%dT%H:%M:%SZ"), "category": categorize(title),
-        })
-    return items
-
-
-def fetch_ed_releases(last_iso):
-    """6 ghante mein ek baar hi ED se maangta hai. (items, naya last_iso) lautata hai."""
-    now = dt.datetime.now(dt.timezone.utc)
-    try:
-        last = dt.datetime.strptime(last_iso, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc)
-        if now - last < dt.timedelta(hours=ED_EVERY_HOURS):
-            print("ED press releases: abhi skip (6 ghante wala niyam)")
-            return [], last_iso
-    except (TypeError, ValueError):
-        pass
-    try:
-        req = urllib.request.Request(ED_API, headers=ED_HEADERS)
-        with urllib.request.urlopen(req, timeout=60) as r:
-            data = json.loads(r.read().decode("utf-8", "replace"))
-        items = parse_ed_api(data if isinstance(data, list) else data.get("items", []))
-        print(f"ED press releases: {len(items)} li gayi")
-        return items, now.strftime("%Y-%m-%dT%H:%M:%SZ")
-    except Exception as e:
-        print(f"[warn] ED press releases fail: {e}", file=sys.stderr)
-        return [], last_iso
-
-
 def load_existing():
     try:
         with open(OUT, encoding="utf-8") as f:
@@ -175,13 +106,6 @@ def load_existing():
     except Exception:
         return []
 
-
-def load_ed_last():
-    try:
-        with open(OUT, encoding="utf-8") as f:
-            return json.load(f).get("ed_last")
-    except Exception:
-        return None
 
 
 def main():
@@ -192,11 +116,6 @@ def main():
             ok += 1
         except Exception as e:
             print(f"[warn] feed fail ({lang}): {e}", file=sys.stderr)
-
-    ed_items, ed_last = fetch_ed_releases(load_ed_last())
-    if ed_items:
-        fresh += ed_items
-        ok += 1
 
     if ok == 0:
         print("Koi feed nahi mila, purani news.json waisi hi rahegi.")
@@ -223,7 +142,6 @@ def main():
     data = {
         "updated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "items": merged[:MAX_ITEMS],
-        "ed_last": ed_last,
     }
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=1)
